@@ -41,7 +41,7 @@ const App = (props: Props) => {
           />
           <Route path={config.root + "/blind"} component={BlindInfo} />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
-          <Redirect to={config.defaultPath} />
+          <Redirect to={config.root + config.defaultPath} />
         </Switch>
       </BrowserRouter>
     </div>
