@@ -18,6 +18,7 @@
     "react-scripts": "^3.3.1",
     "typescript": "^3.7.5"
   },
+  "homepage": "https://ece-492-w2020-group-6.github.io/smart-blinds-webapp/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
