@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.69eda509.chunk.css",
-    "main.js": "/static/js/main.ca83725a.chunk.js",
-    "main.js.map": "/static/js/main.ca83725a.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.6b993f51.js",
-    "runtime-main.js.map": "/static/js/runtime-main.6b993f51.js.map",
-    "static/js/2.d27a6eab.chunk.js": "/static/js/2.d27a6eab.chunk.js",
-    "static/js/2.d27a6eab.chunk.js.map": "/static/js/2.d27a6eab.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.af791db3034b34dd7f2972683a36c132.js": "/precache-manifest.af791db3034b34dd7f2972683a36c132.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.69eda509.chunk.css.map": "/static/css/main.69eda509.chunk.css.map",
-    "static/js/2.d27a6eab.chunk.js.LICENSE.txt": "/static/js/2.d27a6eab.chunk.js.LICENSE.txt"
+    "main.css": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css",
+    "main.js": "/smart-blinds-webapp/static/js/main.4c0668f8.chunk.js",
+    "main.js.map": "/smart-blinds-webapp/static/js/main.4c0668f8.chunk.js.map",
+    "runtime-main.js": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js",
+    "runtime-main.js.map": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js.map",
+    "static/js/2.d27a6eab.chunk.js": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js",
+    "static/js/2.d27a6eab.chunk.js.map": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js.map",
+    "index.html": "/smart-blinds-webapp/index.html",
+    "precache-manifest.0c554fa54ca192cd2ec8451d861d98e9.js": "/smart-blinds-webapp/precache-manifest.0c554fa54ca192cd2ec8451d861d98e9.js",
+    "service-worker.js": "/smart-blinds-webapp/service-worker.js",
+    "static/css/main.69eda509.chunk.css.map": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css.map",
+    "static/js/2.d27a6eab.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.6b993f51.js",
+    "static/js/runtime-main.4cb32e1f.js",
     "static/js/2.d27a6eab.chunk.js",
     "static/css/main.69eda509.chunk.css",
-    "static/js/main.ca83725a.chunk.js"
+    "static/js/main.4c0668f8.chunk.js"
   ]
 }
