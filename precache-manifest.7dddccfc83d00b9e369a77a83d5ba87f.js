@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a8912693e3d59ef963772ba42f83e41e",
+    "revision": "d134c87fcff804543710b6b8efaf9648",
     "url": "/smart-blinds-webapp/index.html"
   },
   {
-    "revision": "5e35c86b451663cb8db2",
+    "revision": "19828cfae1cd5092bdd9",
     "url": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5e35c86b451663cb8db2",
-    "url": "/smart-blinds-webapp/static/js/main.4c0668f8.chunk.js"
+    "revision": "19828cfae1cd5092bdd9",
+    "url": "/smart-blinds-webapp/static/js/main.c1676d59.chunk.js"
   },
   {
     "revision": "3863d32b3d2f57f23396",
