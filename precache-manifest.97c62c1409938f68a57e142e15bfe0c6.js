@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1ff25acdefb51682a5928403f1101926",
+    "revision": "3b5da6d151be942d4523e2c1f261af95",
     "url": "/smart-blinds-webapp/index.html"
   },
   {
-    "revision": "44d4dca74f0e36414813",
+    "revision": "6d6e8c6882470323f31a",
     "url": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css"
   },
   {
-    "revision": "80e7a4ea616389f530b7",
-    "url": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js"
+    "revision": "495fbad9b50b39ca8d76",
+    "url": "/smart-blinds-webapp/static/js/2.ba7c3508.chunk.js"
   },
   {
     "revision": "3adc01bea76e7956dc3633ee898f6936",
-    "url": "/smart-blinds-webapp/static/js/2.d27a6eab.chunk.js.LICENSE.txt"
+    "url": "/smart-blinds-webapp/static/js/2.ba7c3508.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "44d4dca74f0e36414813",
-    "url": "/smart-blinds-webapp/static/js/main.7518e2f0.chunk.js"
+    "revision": "6d6e8c6882470323f31a",
+    "url": "/smart-blinds-webapp/static/js/main.2bd7ebde.chunk.js"
   },
   {
     "revision": "3863d32b3d2f57f23396",
