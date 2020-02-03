@@ -29,6 +29,7 @@ const App = (props: Props) => {
     outdoorTemp: 0,
     cloudCoverage: "Low"
   });
+  console.log(config.root + config.defaultPath, config.root + "/blind");
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -36,6 +37,7 @@ const App = (props: Props) => {
       <BrowserRouter>
         <Switch>
           <Route
+            exact
             path={config.root + "/"}
             render={props => <Splash {...props} stats={currentStats} />}
           />
