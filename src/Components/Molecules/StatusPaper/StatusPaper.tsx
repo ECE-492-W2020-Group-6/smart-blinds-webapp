@@ -8,9 +8,10 @@
  * Date Created:
  *  Feb 1, 2020
  * Derived From:
- *  N/A
+ *  material-ui
  *
- * Splash page for heads-up stats and access to more of the application
+ * Sub component that provides received stats in a compact display.
+ * Based on a material-ui 'Paper' component
  */
 import React from "react";
 import {
@@ -31,6 +32,10 @@ import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CloudIcon from "@material-ui/icons/Cloud";
 import { IStats } from "../../../res/Interfaces";
 
+/**
+ * 'styles' allows for styling within typscript code.
+ * @param theme originates from Material-UI
+ */
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -43,10 +48,19 @@ const styles = (theme: Theme) =>
     }
   });
 
+/**
+ * @typeparam <typeof styles>
+ * @param stats stats to display
+ */
 interface Props extends WithStyles<typeof styles> {
   stats: IStats;
 }
 
+/**
+ * The [[StatusPaper]] functional component provides stats in a compact display
+ * @param props used to pass in stylings
+ * @returns React Element; A material-ui 'paper' component displaying stats
+ */
 const StatusPaper: React.FC<Props> = props => {
   const { classes, stats } = props;
   return (

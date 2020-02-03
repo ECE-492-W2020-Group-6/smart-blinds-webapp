@@ -32,6 +32,10 @@ import StatusPaper from "../../../Components/Molecules/StatusPaper";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
 
+/**
+ * 'styles' allows for styling within typscript code.
+ * @param theme originates from Material-UI
+ */
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -46,12 +50,22 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(0)
     }
   });
-
+/**
+ * @typeparam <typeof styles>
+ * @param stats stats to display, passed down to [[StatusPaper]]
+ * @param blindList list of blind objects to display
+ */
 interface Props extends WithStyles<typeof styles> {
   stats: IStats;
   blindList: Blind[];
 }
 
+/**
+ * The [[Splash]] functional component acts as the
+ * primary landing page for the application.
+ * @param props used to pass in stylings
+ * @returns React Element; the Splash page
+ */
 const Splash: React.FC<Props> = props => {
   const { stats, blindList, classes } = props;
   return (

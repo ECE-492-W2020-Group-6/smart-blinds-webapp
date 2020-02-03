@@ -4,6 +4,8 @@
  *  styles
  * Author(s):
  *  Kevin de Haan
+ * Date Created:
+ *  Feb 1, 2020
  * Derived From:
  *  create-react-app
  *
@@ -39,6 +41,9 @@ const styles = (theme: Theme) =>
     }
   });
 
+/**
+ * @typeparam <typeof styles>
+ */
 interface Props extends WithStyles<typeof styles> {}
 
 /**

@@ -1,3 +1,17 @@
+/**
+ * Entity Names:
+ *  Header
+ *  styles
+ * Author(s):
+ *  Kevin de Haan
+ * Date Created:
+ *  Feb 1, 2020
+ * Derived From:
+ *  create-react-app
+ *
+ * The Header functional component sits at the top of the application.
+ *
+ */
 import React from "react";
 import {
   Theme,
@@ -12,6 +26,10 @@ import {
 // import HomeIcon from "@material-ui/icons/Home";
 import LineWeightIcon from "@material-ui/icons/LineWeight";
 
+/**
+ * 'styles' allows for styling within typscript code.
+ * @param theme originates from Material-UI
+ */
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -25,10 +43,19 @@ const styles = (theme: Theme) =>
     }
   });
 
+/**
+ * @typeparam <typeof styles>
+ * @param title title to display in the header
+ */
 interface Props extends WithStyles<typeof styles> {
   title: string;
 }
 
+/**
+ * The [[Header]] functional component sits at the top of the application.
+ * @param props used to pass in stylings
+ * @returns React Element; the application header
+ */
 const Header: React.FC<Props> = props => {
   const { classes, title } = props;
   return (
