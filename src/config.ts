@@ -4,7 +4,7 @@ interface IConfig {
 }
 
 const config: IConfig = {
-  root: "/",
+  root: "/smart-blinds-webapp",
   defaultPath: "/"
 };
 

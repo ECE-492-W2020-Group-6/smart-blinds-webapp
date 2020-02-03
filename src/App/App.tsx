@@ -8,6 +8,7 @@ import { Theme, createStyles, withStyles, WithStyles } from "@material-ui/core";
 import Splash from "../Components/Pages/Splash";
 import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindInfo from "../Components/Pages/BlindInfo";
+import Blind from "../res/Classes/Blind";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -27,8 +28,15 @@ const App = (props: Props) => {
   const [currentStats, setStats] = useState({
     indoorTemp: 21,
     outdoorTemp: 0,
-    cloudCoverage: "Low"
+    cloudCoverage: "Low",
+    motorPosition: 0
   });
+
+  const [blinds, setBlinds] = useState([
+    new Blind("Test Blinds", { address: "localhost", password: "123pass" }),
+    new Blind("Other blinds", { address: "1.255.02.3", password: "123pass" })
+  ]);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -36,12 +44,15 @@ const App = (props: Props) => {
       <BrowserRouter>
         <Switch>
           <Route
+            exact
             path={config.root + "/"}
-            render={props => <Splash {...props} stats={currentStats} />}
+            render={props => (
+              <Splash {...props} stats={currentStats} blindList={blinds} />
+            )}
           />
           <Route path={config.root + "/blind"} component={BlindInfo} />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
-          <Redirect to={config.defaultPath} />
+          <Redirect to={config.root + config.defaultPath} />
         </Switch>
       </BrowserRouter>
     </div>

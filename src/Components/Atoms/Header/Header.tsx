@@ -9,7 +9,8 @@ import {
   AppBar,
   Typography
 } from "@material-ui/core";
-import HomeIcon from "@material-ui/icons/Home";
+// import HomeIcon from "@material-ui/icons/Home";
+import LineWeightIcon from "@material-ui/icons/LineWeight";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -40,7 +41,7 @@ const Header: React.FC<Props> = props => {
             color="inherit"
             aria-label="menu"
           >
-            <HomeIcon />
+            <LineWeightIcon />
           </IconButton>
           <Typography variant="h6" color="inherit">
             {title}
