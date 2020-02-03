@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.2.0"
+    "gh-pages": "^2.2.0",
+    "typedoc": "^0.16.9"
   }
 }
