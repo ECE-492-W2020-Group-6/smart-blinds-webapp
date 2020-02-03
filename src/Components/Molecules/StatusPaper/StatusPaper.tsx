@@ -1,3 +1,17 @@
+/**
+ * Entity Names:
+ *  StatusPaper
+ *  props
+ *  styles
+ * Author(s):
+ *  Kevin de Haan
+ * Date Created:
+ *  Feb 1, 2020
+ * Derived From:
+ *  N/A
+ *
+ * Splash page for heads-up stats and access to more of the application
+ */
 import React from "react";
 import {
   Theme,
@@ -38,11 +52,7 @@ const StatusPaper: React.FC<Props> = props => {
   return (
     <React.Fragment>
       <Paper className={classes.root}>
-        <Typography
-          className={classes.title}
-          color="textPrimary"
-          // gutterBottom
-        >
+        <Typography className={classes.title} color="textPrimary">
           Current Status:
         </Typography>
         <List className={classes.root}></List>

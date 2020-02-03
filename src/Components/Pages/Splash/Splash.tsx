@@ -1,3 +1,17 @@
+/**
+ * Entity Names:
+ *  Splash
+ *  props
+ *  styles
+ * Author(s):
+ *  Kevin de Haan
+ * Date Created:
+ *  Feb 1, 2020
+ * Derived From:
+ *  N/A
+ *
+ * Splash page for heads-up stats and access to more of the application
+ */
 import React from "react";
 import {
   Theme,
