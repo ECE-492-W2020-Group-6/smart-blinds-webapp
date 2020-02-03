@@ -1,3 +1,18 @@
+/**
+ * Entity Names:
+ *  App
+ *  styles
+ * Author(s):
+ *  Kevin de Haan
+ * Derived From:
+ *  create-react-app
+ *
+ * The App object acts as the root of the application.
+ * All other components branch out in usage from this functional component.
+ * 'styles' allows for styling within typscript code.
+ *
+ */
+
 import React, { useState } from "react";
 import config from "../config";
 import { Redirect } from "react-router";
@@ -10,6 +25,10 @@ import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindInfo from "../Components/Pages/BlindInfo";
 import Blind from "../res/Classes/Blind";
 
+/**
+ * 'styles' allows for styling within typscript code.
+ * @param theme originates from Material-UI
+ */
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -22,9 +41,15 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {}
 
+/**
+ * The [[App]] functional component acts as the root of the application.
+ * All other components branch out in usage from this component.
+ * @param props used to pass in stylings
+ * @returns React Element; the application
+ */
 const App = (props: Props) => {
   const { classes } = props;
-  //dummy for now
+  // temporary until the webserver is configured
   const [currentStats, setStats] = useState({
     indoorTemp: 21,
     outdoorTemp: 0,
@@ -32,9 +57,10 @@ const App = (props: Props) => {
     motorPosition: 0
   });
 
+  // temporary
   const [blinds, setBlinds] = useState([
     new Blind("Test Blinds", { address: "localhost", password: "123pass" }),
-    new Blind("Other blinds", { address: "1.255.02.3", password: "123pass" })
+    new Blind("Other blinds", { address: "1.255.02.3", password: "pass123" })
   ]);
 
   return (
