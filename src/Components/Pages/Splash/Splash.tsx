@@ -25,9 +25,9 @@ import {
   ListItemIcon,
   Paper
 } from "@material-ui/core";
-
+import { Link } from "react-router-dom";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-
+import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
@@ -76,7 +76,7 @@ const Splash: React.FC<Props> = props => {
         {blindList.map((blind: Blind) => (
           <React.Fragment key={blind.getAddress()}>
             <Paper>
-              <ListItem>
+              <ListItem button component={Link} to={config.root + "/blind"}>
                 <ListItemIcon>
                   <ArrowRightIcon />
                 </ListItemIcon>
