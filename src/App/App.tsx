@@ -71,8 +71,8 @@ const App = (props: Props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header title="Smart Blinds" />
       <BrowserRouter>
+        <Header title="Smart Blinds" />
         <Switch>
           <Route
             exact

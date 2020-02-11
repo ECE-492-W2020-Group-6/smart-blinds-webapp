@@ -13,6 +13,8 @@
  *
  */
 import React from "react";
+import config from "../../../config";
+import { Link } from "react-router-dom";
 import {
   Theme,
   createStyles,
@@ -63,6 +65,8 @@ const Header: React.FC<Props> = props => {
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            component={Link}
+            to={config.root + "/"}
             edge="start"
             className={classes.menuButton}
             color="inherit"
