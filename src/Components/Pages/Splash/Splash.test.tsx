@@ -31,6 +31,7 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <Splash
       stats={stats}
+      switchBlind={() => 0}
       blindList={[
         new Blind("Test Blinds", { address: "localhost", password: "123pass" })
       ]}

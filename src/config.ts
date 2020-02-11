@@ -1,11 +1,13 @@
 interface IConfig {
   root: string;
   defaultPath: string;
+  mainTitle: string;
 }
 
 const config: IConfig = {
   root: "/smart-blinds-webapp",
-  defaultPath: "/"
+  defaultPath: "/",
+  mainTitle: "Smart Blinds"
 };
 
 export default config;
