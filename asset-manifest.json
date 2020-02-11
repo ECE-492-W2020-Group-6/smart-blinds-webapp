@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css",
-    "main.js": "/smart-blinds-webapp/static/js/main.2bd7ebde.chunk.js",
-    "main.js.map": "/smart-blinds-webapp/static/js/main.2bd7ebde.chunk.js.map",
+    "main.css": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css",
+    "main.js": "/smart-blinds-webapp/static/js/main.1a3cb2b1.chunk.js",
+    "main.js.map": "/smart-blinds-webapp/static/js/main.1a3cb2b1.chunk.js.map",
     "runtime-main.js": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js",
     "runtime-main.js.map": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js.map",
-    "static/js/2.ba7c3508.chunk.js": "/smart-blinds-webapp/static/js/2.ba7c3508.chunk.js",
-    "static/js/2.ba7c3508.chunk.js.map": "/smart-blinds-webapp/static/js/2.ba7c3508.chunk.js.map",
+    "static/js/2.2f35b6eb.chunk.js": "/smart-blinds-webapp/static/js/2.2f35b6eb.chunk.js",
+    "static/js/2.2f35b6eb.chunk.js.map": "/smart-blinds-webapp/static/js/2.2f35b6eb.chunk.js.map",
     "index.html": "/smart-blinds-webapp/index.html",
-    "precache-manifest.97c62c1409938f68a57e142e15bfe0c6.js": "/smart-blinds-webapp/precache-manifest.97c62c1409938f68a57e142e15bfe0c6.js",
+    "precache-manifest.dca9b964e922be0f5ccc4af94f216826.js": "/smart-blinds-webapp/precache-manifest.dca9b964e922be0f5ccc4af94f216826.js",
     "service-worker.js": "/smart-blinds-webapp/service-worker.js",
-    "static/css/main.69eda509.chunk.css.map": "/smart-blinds-webapp/static/css/main.69eda509.chunk.css.map",
-    "static/js/2.ba7c3508.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.ba7c3508.chunk.js.LICENSE.txt"
+    "static/css/main.34de6062.chunk.css.map": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css.map",
+    "static/js/2.2f35b6eb.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.2f35b6eb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4cb32e1f.js",
-    "static/js/2.ba7c3508.chunk.js",
-    "static/css/main.69eda509.chunk.css",
-    "static/js/main.2bd7ebde.chunk.js"
+    "static/js/2.2f35b6eb.chunk.js",
+    "static/css/main.34de6062.chunk.css",
+    "static/js/main.1a3cb2b1.chunk.js"
   ]
 }
