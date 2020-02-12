@@ -4,6 +4,7 @@
         "MOTORMIDPOINT",
         "browserslist",
         "predeploy",
+        "typeparam",
         "webapp"
     ]
 }

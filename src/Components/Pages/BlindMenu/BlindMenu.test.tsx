@@ -11,7 +11,7 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import BlindInfo from "./BlindInfo";
+import BlindMenu from "./BlindMenu";
 import Blind from "../../../res/Classes/Blind";
 
 const testRenderBlind: Blind = new Blind("Other blinds", {
@@ -21,6 +21,6 @@ const testRenderBlind: Blind = new Blind("Other blinds", {
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<BlindInfo blind={testRenderBlind} />, div);
+  ReactDOM.render(<BlindMenu blind={testRenderBlind} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

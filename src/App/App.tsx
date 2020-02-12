@@ -24,7 +24,7 @@ import Header from "../Components/Atoms/Header";
 import { Theme, createStyles, withStyles, WithStyles } from "@material-ui/core";
 import Splash from "../Components/Pages/Splash";
 import ViewSchedules from "../Components/Pages/ViewSchedules";
-import BlindInfo from "../Components/Pages/BlindInfo";
+import BlindMenu from "../Components/Pages/BlindMenu";
 import Blind from "../res/Classes/Blind";
 import { IStats } from "../res/Interfaces";
 
@@ -117,7 +117,7 @@ const App = (props: Props) => {
         />
         <Route
           path={config.root + "/blind"}
-          render={props => <BlindInfo {...props} blind={currentBlind} />}
+          render={props => <BlindMenu {...props} blind={currentBlind} />}
         />
         <Route path={config.root + "/schedules"} component={ViewSchedules} />
         <Redirect to={config.root + config.defaultPath} />

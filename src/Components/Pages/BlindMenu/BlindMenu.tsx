@@ -9,7 +9,8 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Button
 } from "@material-ui/core";
 import Brightness5Icon from "@material-ui/icons/Brightness5";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
@@ -18,13 +19,15 @@ import EcoIcon from "@material-ui/icons/Eco";
 import BorderAllIcon from "@material-ui/icons/BorderAll";
 import FormatAlignJustifyIcon from "@material-ui/icons/FormatAlignJustify";
 import Blind from "../../../res/Classes/Blind";
+import { Link } from "react-router-dom";
 // import { IStats } from "../../../res/Interfaces";
 import config from "../../../config";
+import Footer from "../../Atoms/Footer";
 
 const LOADING_MESSAGE = "loading...";
 
 /**
- * 'styles' allows for styling within typscript code.
+ * 'styles' allows for styling within typescript code.
  * @param theme originates from Material-UI
  */
 const styles = (theme: Theme) =>
@@ -50,12 +53,12 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 /**
- * The [[BlindInfo]] functional component acts as the
+ * The [[BlindMenu]] functional component acts as the
  * primary landing page for the application.
  * @param props used to pass in stylings and the blind object
- * @returns React Element; the BlindInfo component
+ * @returns React Element; the BlindMenu component
  */
-const BlindInfo: React.FC<Props> = props => {
+const BlindMenu: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [stats, setStats] = useState();
   const [schedule, setSchedule] = useState();
@@ -115,8 +118,16 @@ const BlindInfo: React.FC<Props> = props => {
           />
         </ListItem>
       </Paper>
+      <Footer
+        buttons={[
+          <Button component={Link} to={config.root + "/"} color="inherit">
+            Manual Control
+          </Button>,
+          <Button color="inherit">Set Schedule</Button>
+        ]}
+      />
     </React.Fragment>
   );
 };
 
-export default withStyles(styles)(BlindInfo);
+export default withStyles(styles)(BlindMenu);
