@@ -11,14 +11,14 @@
  *
  * The App object acts as the root of the application.
  * All other components branch out in usage from this functional component.
- * 'styles' allows for styling within typscript code.
+ * 'styles' allows for styling within typescript code.
  *
  */
 
 import React, { useState, useEffect } from "react";
 import config from "../config";
 import { Redirect, useLocation } from "react-router";
-import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "../Components/Atoms/Header";
 import { Theme, createStyles, withStyles, WithStyles } from "@material-ui/core";
@@ -26,9 +26,10 @@ import Splash from "../Components/Pages/Splash";
 import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindInfo from "../Components/Pages/BlindInfo";
 import Blind from "../res/Classes/Blind";
+import { IStats } from "../res/Interfaces";
 
 /**
- * 'styles' allows for styling within typscript code.
+ * 'styles' allows for styling within typescript code.
  * @param theme originates from Material-UI
  */
 const styles = (theme: Theme) =>
@@ -54,13 +55,6 @@ interface Props extends WithStyles<typeof styles> {}
  */
 const App = (props: Props) => {
   const { classes } = props;
-  // temporary until the webserver is configured
-  const [currentStats, setStats] = useState({
-    indoorTemp: 21,
-    outdoorTemp: 0,
-    cloudCoverage: "Low",
-    motorPosition: 0
-  });
 
   let testBlind: Blind = new Blind("Test Blinds", {
     address: "localhost",
@@ -70,9 +64,27 @@ const App = (props: Props) => {
     address: "1.255.02.3",
     password: "pass123"
   });
+  let testStats: IStats = {
+    indoorTemp: 21,
+    outdoorTemp: 20,
+    cloudCoverage: "Low",
+    motorPosition: 0
+  };
   const [blinds, setBlinds] = useState([testBlind, otherBlind]);
   const [currentBlind, setBlind] = useState();
   const [title, setTitle] = useState("Smart Blinds");
+
+  // temporary until the webserver is configured
+  const [currentStats, setStats] = useState(testStats);
+
+  useEffect(() => {
+    if (blinds.length < 1) {
+      return;
+    }
+    blinds[0].getStatus().then(statusResponse => {
+      setStats(statusResponse);
+    });
+  }, [blinds]);
 
   function switchBlind(blind: Blind) {
     setBlind(blind);

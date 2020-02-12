@@ -41,7 +41,7 @@ class Blind {
       // temp
       indoorTemp: 22,
       outdoorTemp: -23,
-      cloudCoverage: "high",
+      cloudCoverage: "High",
       motorPosition: 50
     };
 

@@ -18,7 +18,7 @@ import EcoIcon from "@material-ui/icons/Eco";
 import BorderAllIcon from "@material-ui/icons/BorderAll";
 import FormatAlignJustifyIcon from "@material-ui/icons/FormatAlignJustify";
 import Blind from "../../../res/Classes/Blind";
-import { IStats } from "../../../res/Interfaces";
+// import { IStats } from "../../../res/Interfaces";
 import config from "../../../config";
 
 const LOADING_MESSAGE = "loading...";
@@ -83,7 +83,7 @@ const BlindInfo: React.FC<Props> = props => {
           <ListItemIcon>
             {stats === undefined ? (
               <AutorenewIcon />
-            ) : stats.motorPostion > config.MOTORMIDPOINT ? (
+            ) : stats.motorPosition > config.MOTORMIDPOINT ? (
               <BorderAllIcon />
             ) : (
               <FormatAlignJustifyIcon />
