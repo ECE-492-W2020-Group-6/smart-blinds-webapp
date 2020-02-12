@@ -34,20 +34,41 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch("Status");
-    let responseJSON = await response.clone().json();
-    let status: IStats = responseJSON.status;
-    return status;
+    // let response = await this.BlindAPI.createFetch("Status");
+    // let responseJSON = await response.clone().json();
+    // let status: IStats = responseJSON.status;
+    let status = {
+      // temp
+      indoorTemp: 22,
+      outdoorTemp: -23,
+      cloudCoverage: "high",
+      motorPosition: 50
+    };
+
+    const promise = new Promise<IStats>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(status);
+      }, 500);
+    });
+    return promise;
   }
 
   /**
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
-    let response = await this.BlindAPI.createFetch("Status");
-    let responseJSON = await response.clone().json();
-    let schedule: ISchedule = responseJSON.status;
-    return schedule;
+    // let response = await this.BlindAPI.createFetch("Status");
+    // let responseJSON = await response.clone().json();
+    // let schedule: ISchedule = responseJSON.status;
+
+    var schedule = { days: "Auto" };
+    const promise = new Promise<ISchedule>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(schedule);
+      }, 500);
+    });
+
+    return promise;
   }
 
   /**
