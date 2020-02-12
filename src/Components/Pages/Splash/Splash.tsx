@@ -25,9 +25,9 @@ import {
   ListItemIcon,
   Paper
 } from "@material-ui/core";
-
+import { Link } from "react-router-dom";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-
+import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
@@ -58,6 +58,7 @@ const styles = (theme: Theme) =>
 interface Props extends WithStyles<typeof styles> {
   stats: IStats;
   blindList: Blind[];
+  switchBlind: (blind: Blind) => void;
 }
 
 /**
@@ -67,7 +68,7 @@ interface Props extends WithStyles<typeof styles> {
  * @returns React Element; the Splash page
  */
 const Splash: React.FC<Props> = props => {
-  const { stats, blindList, classes } = props;
+  const { stats, blindList, switchBlind, classes } = props;
   return (
     <div className={classes.root}>
       <StatusPaper stats={stats} />
@@ -76,7 +77,14 @@ const Splash: React.FC<Props> = props => {
         {blindList.map((blind: Blind) => (
           <React.Fragment key={blind.getAddress()}>
             <Paper>
-              <ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  switchBlind(blind);
+                }}
+                component={Link}
+                to={config.root + "/blind"}
+              >
                 <ListItemIcon>
                   <ArrowRightIcon />
                 </ListItemIcon>
