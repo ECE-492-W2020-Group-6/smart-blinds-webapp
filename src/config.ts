@@ -42,6 +42,7 @@ interface IConfig {
     blinds: Blind[];
   };
   defaultObjects: {
+    schedule: ISchedule;
     blindMode: IBlindMode;
   };
 }
@@ -57,6 +58,7 @@ const config: IConfig = {
     blinds: [testBlind, otherBlind]
   },
   defaultObjects: {
+    schedule: defaultSchedule,
     blindMode: defaultBlindMode
   }
 };
