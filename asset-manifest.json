@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/smart-blinds-webapp/static/css/main.498d002a.chunk.css",
-    "main.js": "/smart-blinds-webapp/static/js/main.552a5379.chunk.js",
-    "main.js.map": "/smart-blinds-webapp/static/js/main.552a5379.chunk.js.map",
+    "main.css": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css",
+    "main.js": "/smart-blinds-webapp/static/js/main.586a948e.chunk.js",
+    "main.js.map": "/smart-blinds-webapp/static/js/main.586a948e.chunk.js.map",
     "runtime-main.js": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js",
     "runtime-main.js.map": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js.map",
     "static/js/2.0ea68194.chunk.js": "/smart-blinds-webapp/static/js/2.0ea68194.chunk.js",
     "static/js/2.0ea68194.chunk.js.map": "/smart-blinds-webapp/static/js/2.0ea68194.chunk.js.map",
     "index.html": "/smart-blinds-webapp/index.html",
-    "precache-manifest.d4f11fdf3a10249da1386ece9de62d0f.js": "/smart-blinds-webapp/precache-manifest.d4f11fdf3a10249da1386ece9de62d0f.js",
+    "precache-manifest.0284324fefc03ca27cb78c22b41a1ad4.js": "/smart-blinds-webapp/precache-manifest.0284324fefc03ca27cb78c22b41a1ad4.js",
     "service-worker.js": "/smart-blinds-webapp/service-worker.js",
-    "static/css/main.498d002a.chunk.css.map": "/smart-blinds-webapp/static/css/main.498d002a.chunk.css.map",
+    "static/css/main.34de6062.chunk.css.map": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css.map",
     "static/js/2.0ea68194.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.0ea68194.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4cb32e1f.js",
     "static/js/2.0ea68194.chunk.js",
-    "static/css/main.498d002a.chunk.css",
-    "static/js/main.552a5379.chunk.js"
+    "static/css/main.34de6062.chunk.css",
+    "static/js/main.586a948e.chunk.js"
   ]
 }
