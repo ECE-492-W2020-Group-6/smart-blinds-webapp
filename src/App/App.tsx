@@ -19,9 +19,16 @@ import React, { useState, useEffect } from "react";
 import config from "../config";
 import { Redirect, useLocation } from "react-router";
 import { Switch, Route } from "react-router-dom";
+import { defaultTheme } from "../res/styles/Themes";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "../Components/Atoms/Header";
-import { Theme, createStyles, withStyles, WithStyles } from "@material-ui/core";
+import {
+  Theme,
+  createStyles,
+  withStyles,
+  WithStyles,
+  ThemeProvider
+} from "@material-ui/core";
 import Splash from "../Components/Pages/Splash";
 import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindMenu from "../Components/Pages/BlindMenu";
@@ -101,27 +108,29 @@ const App = (props: Props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header title={title} />
-      <Switch>
-        <Route
-          exact
-          path={config.root + "/"}
-          render={props => (
-            <Splash
-              {...props}
-              stats={currentStats}
-              blindList={blinds}
-              switchBlind={switchBlind}
-            />
-          )}
-        />
-        <Route
-          path={config.root + "/blind"}
-          render={props => <BlindMenu {...props} blind={currentBlind} />}
-        />
-        <Route path={config.root + "/schedules"} component={ViewSchedules} />
-        <Redirect to={config.root + config.defaultPath} />
-      </Switch>
+      <ThemeProvider theme={defaultTheme}>
+        <Header title={title} />
+        <Switch>
+          <Route
+            exact
+            path={config.root + "/"}
+            render={props => (
+              <Splash
+                {...props}
+                stats={currentStats}
+                blindList={blinds}
+                switchBlind={switchBlind}
+              />
+            )}
+          />
+          <Route
+            path={config.root + "/blind"}
+            render={props => <BlindMenu {...props} blind={currentBlind} />}
+          />
+          <Route path={config.root + "/schedules"} component={ViewSchedules} />
+          <Redirect to={config.root + config.defaultPath} />
+        </Switch>
+      </ThemeProvider>
     </div>
   );
 };
