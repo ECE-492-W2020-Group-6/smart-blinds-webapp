@@ -13,6 +13,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import BlindMenu from "./BlindMenu";
 import Blind from "../../../res/Classes/Blind";
+import { BrowserRouter } from "react-router-dom";
 
 const testRenderBlind: Blind = new Blind("Other blinds", {
   address: "1.255.02.3",
@@ -21,6 +22,11 @@ const testRenderBlind: Blind = new Blind("Other blinds", {
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<BlindMenu blind={testRenderBlind} />, div);
+  ReactDOM.render(
+    <BrowserRouter>
+      <BlindMenu blind={testRenderBlind} />
+    </BrowserRouter>,
+    div
+  );
   ReactDOM.unmountComponentAtNode(div);
 });

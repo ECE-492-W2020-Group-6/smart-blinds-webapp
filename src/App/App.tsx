@@ -98,7 +98,11 @@ const App = (props: Props) => {
     setTitle(blind.getName());
   }
 
-  var location = useLocation();
+  let location = { pathname: config.root + config.defaultPath };
+  try {
+    location = useLocation();
+  } catch (e) {}
+
   useEffect(() => {
     if (location.pathname === config.root + config.defaultPath) {
       setTitle(config.mainTitle);
