@@ -123,7 +123,13 @@ const BlindMenu: React.FC<Props> = props => {
           <Button component={Link} to={config.root + "/"} color="inherit">
             Manual Control
           </Button>,
-          <Button color="inherit">Set Schedule</Button>
+          <Button
+            component={Link}
+            to={config.root + "/blind/createschedule"}
+            color="inherit"
+          >
+            Set Schedule
+          </Button>
         ]}
       />
     </React.Fragment>

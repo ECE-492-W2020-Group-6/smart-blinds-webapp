@@ -34,6 +34,7 @@ import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindMenu from "../Components/Pages/BlindMenu";
 import Blind from "../res/Classes/Blind";
 import { IStats } from "../res/Interfaces";
+import CreateSchedule from "../Components/Pages/CreateSchedule";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -98,10 +99,7 @@ const App = (props: Props) => {
     setTitle(blind.getName());
   }
 
-  let location = { pathname: config.root + config.defaultPath };
-  try {
-    location = useLocation();
-  } catch (e) {}
+  var location = useLocation();
 
   useEffect(() => {
     if (location.pathname === config.root + config.defaultPath) {
@@ -128,10 +126,15 @@ const App = (props: Props) => {
             )}
           />
           <Route
+            exact
             path={config.root + "/blind"}
             render={props => <BlindMenu {...props} blind={currentBlind} />}
           />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
+          <Route
+            path={config.root + "/blind/createschedule"}
+            render={props => <CreateSchedule {...props} blind={currentBlind} />}
+          />
           <Redirect to={config.root + config.defaultPath} />
         </Switch>
       </ThemeProvider>
