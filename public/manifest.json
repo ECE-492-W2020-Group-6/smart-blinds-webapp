@@ -1,11 +1,11 @@
 {
   "short_name": "Smart Blinds",
-  "name": "Smart Blinds",
+  "name": "Smart Blinds Remote Control",
   "description": "An app for managing smart venetian blinds",
   "icons": [
     {
-      "src": "src/res/images/favicon.svg",
-      "sizes": "192x192 96x96 64x64 32x32 24x24 16x16",
+      "src": "favicon.ico",
+      "sizes": "192x192 256x256 96x96 64x64 48x48",
       "type": "image/x-icon"
     }
   ],
