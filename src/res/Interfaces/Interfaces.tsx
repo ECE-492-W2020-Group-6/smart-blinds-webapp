@@ -40,8 +40,38 @@ export interface ICredentials {
 
 /**
  * Describes a schedule for a smart blind device to follow
- * @var `days` placeholder until schedule object is better defined
+ * @var defaultMode default operating mode
+ * @var monday_to_sunday specified non-default behaviour times per day
  */
 export interface ISchedule {
-  days: string;
+  defaultMode: IBlindMode;
+  monday: ITimeSlot[];
+  tuesday: ITimeSlot[];
+  wednesday: ITimeSlot[];
+  thursday: ITimeSlot[];
+  friday: ITimeSlot[];
+  saturday: ITimeSlot[];
+  sunday: ITimeSlot[];
+}
+
+/**
+ * Describes a single block of schedule time
+ * @var start beginning of block
+ * @var end end of block
+ * @var mode operating mode
+ */
+export interface ITimeSlot {
+  start: Date;
+  end: Date;
+  mode: IBlindMode;
+}
+
+/**
+ * Describes a single block of schedule time
+ * @var type operating mode
+ * @var percentage operating magnitude
+ */
+export interface IBlindMode {
+  type: "LIGHT" | "ECO";
+  percentage?: number;
 }
