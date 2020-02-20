@@ -8,7 +8,7 @@
  * Date Created:
  *  Feb 18, 2020
  * Derived From:
- *  @remotelock/react-week-scheduler
+ *
  *
  * Schedule builder UI
  */
@@ -25,16 +25,8 @@ import {
 
 import Blind from "../../../res/Classes/Blind";
 import { Link } from "react-router-dom";
-// import { IStats } from "../../../res/Interfaces";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
-
-import "resize-observer-polyfill/dist/ResizeObserver.global";
-import {
-  TimeGridScheduler,
-  classes as schedulerClasses
-} from "@remotelock/react-week-scheduler";
-import "@remotelock/react-week-scheduler/index.css";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -72,22 +64,6 @@ const CreateSchedule: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
 
-  const rangeStrings = [
-    ["2019-03-04 00:15", "2019-03-04 01:45"],
-    ["2019-03-05 09:00", "2019-03-05 10:30"],
-    ["2019-03-06 22:00", "2019-03-06 22:30"],
-    ["2019-03-07 01:30", "2019-03-07 03:00"],
-    ["2019-03-07 05:30", "2019-03-07 10:00"],
-    ["2019-03-08 12:30", "2019-03-08 01:30"],
-    ["2019-03-09 22:00", "2019-03-09 23:59"]
-  ];
-
-  const defaultSchedule: any = rangeStrings.map(range =>
-    range.map(dateString => new Date(dateString))
-  );
-
-  const [displayedSchedule, setDisplayedSchedule] = useState(defaultSchedule);
-
   useEffect(() => {
     if (blind === undefined) {
       return;
@@ -99,9 +75,7 @@ const CreateSchedule: React.FC<Props> = props => {
 
   return (
     <React.Fragment>
-      <Paper className={classes.root}>
-        <TimeGridScheduler classes={schedulerClasses} {...otherProps} />
-      </Paper>
+      <Paper className={classes.root}></Paper>
       <Footer
         buttons={[
           <Button
