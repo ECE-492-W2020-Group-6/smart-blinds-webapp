@@ -12,6 +12,7 @@ import {
   ListItemText,
   Button
 } from "@material-ui/core";
+
 import Brightness5Icon from "@material-ui/icons/Brightness5";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
@@ -62,6 +63,7 @@ const BlindMenu: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [stats, setStats] = useState();
   const [schedule, setSchedule] = useState();
+  const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
 
   useEffect(() => {
     if (blind === undefined) {
@@ -69,6 +71,7 @@ const BlindMenu: React.FC<Props> = props => {
     }
     blind.getSchedule().then(scheduleResponse => {
       setSchedule(scheduleResponse);
+      setblindMode(blind.GetCurrentBehavior(scheduleResponse));
     });
     blind.getStatus().then(statsResponse => {
       setStats(statsResponse);
@@ -104,9 +107,9 @@ const BlindMenu: React.FC<Props> = props => {
           <ListItemIcon>
             {schedule === undefined ? (
               <AutorenewIcon />
-            ) : schedule.days === "Auto" ? (
+            ) : blindMode.type === "ECO" ? (
               <EcoIcon />
-            ) : schedule.days === "Light" ? (
+            ) : blindMode.type === "LIGHT" ? (
               <Brightness5Icon />
             ) : (
               <Brightness3Icon />
@@ -114,7 +117,7 @@ const BlindMenu: React.FC<Props> = props => {
           </ListItemIcon>
           <ListItemText
             secondary="Behavior"
-            primary={schedule === undefined ? LOADING_MESSAGE : schedule.days} //convert
+            primary={schedule === undefined ? LOADING_MESSAGE : blindMode.type} //convert
           />
         </ListItem>
       </Paper>
@@ -123,7 +126,13 @@ const BlindMenu: React.FC<Props> = props => {
           <Button component={Link} to={config.root + "/"} color="inherit">
             Manual Control
           </Button>,
-          <Button color="inherit">Set Schedule</Button>
+          <Button
+            component={Link}
+            to={config.root + "/blind/createschedule"}
+            color="inherit"
+          >
+            Set Schedule
+          </Button>
         ]}
       />
     </React.Fragment>

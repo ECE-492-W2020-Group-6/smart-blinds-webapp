@@ -33,7 +33,7 @@ import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
 
 /**
- * 'styles' allows for styling within typscript code.
+ * 'styles' allows for styling within typescript code.
  * @param theme originates from Material-UI
  */
 const styles = (theme: Theme) =>

@@ -11,7 +11,15 @@
  * Object that abstracts blind actions to the rest of the application
  */
 import BlindAPI from "../BlindAPI";
-import { ICredentials, IStats, ISchedule } from "../../Interfaces";
+import {
+  ICredentials,
+  IStats,
+  ISchedule,
+  IBlindMode,
+  ITimeSlot
+} from "../../Interfaces";
+import config from "../../../config";
+import { daysList } from "../../blindTypes";
 
 /**
  * Abstracts Smart Blind operation
@@ -54,6 +62,40 @@ class Blind {
   }
 
   /**
+   * @returns current behavior mode
+   */
+  GetCurrentBehavior(schedule: ISchedule): IBlindMode {
+    let now: Date = new Date();
+    let scheduleDay: ITimeSlot[] = schedule[daysList[now.getUTCDay()]];
+    if (scheduleDay.length === 0) {
+      return schedule.defaultMode;
+    }
+    scheduleDay.forEach((timeSlot: ITimeSlot) => {
+      if (this.TimeslotIsActive(timeSlot, now)) {
+        return timeSlot.mode;
+      }
+    });
+    return schedule.defaultMode;
+  }
+
+  /**
+   * @returns if specified time is in the specified time slot
+   */
+  TimeslotIsActive(timeSlot: ITimeSlot, time: Date): boolean {
+    function getTimeOfDay(date: Date) {
+      return `${date.getUTCHours}${date.getUTCMinutes}${date.getUTCSeconds}`;
+    }
+    let timeOfDay: string = getTimeOfDay(time);
+    if (
+      timeOfDay >= getTimeOfDay(timeSlot.start) &&
+      timeOfDay < getTimeOfDay(timeSlot.end)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
@@ -61,7 +103,7 @@ class Blind {
     // let responseJSON = await response.clone().json();
     // let schedule: ISchedule = responseJSON.status;
 
-    var schedule = { days: "Auto" };
+    var schedule = config.testCases.schedules[0];
     const promise = new Promise<ISchedule>((resolve, reject) => {
       setTimeout(() => {
         resolve(schedule);

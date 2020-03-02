@@ -1,6 +1,6 @@
 /**
  * Entity Names:
- *  BlindInfo
+ *  StatusPaper
  * Author(s):
  *  Kevin de Haan
  * Derived From:
@@ -11,20 +11,14 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import BlindMenu from "./BlindMenu";
-import Blind from "../../../res/Classes/Blind";
-import { BrowserRouter } from "react-router-dom";
+import ScheduleBuilder from "../ScheduleBuilder";
+import { ISchedule } from "../../../res/Interfaces";
 import config from "../../../config";
 
-config.testCases.blinds.forEach((testBlind: Blind) => {
+config.testCases.schedules.forEach((testSchedule: ISchedule) => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(
-      <BrowserRouter>
-        <BlindMenu blind={testBlind} />
-      </BrowserRouter>,
-      div
-    );
+    ReactDOM.render(<ScheduleBuilder schedule={testSchedule} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });
