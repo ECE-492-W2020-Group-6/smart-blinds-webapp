@@ -34,6 +34,7 @@ import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindMenu from "../Components/Pages/BlindMenu";
 import Blind from "../res/Classes/Blind";
 import { IStats } from "../res/Interfaces";
+import CreateSchedule from "../Components/Pages/CreateSchedule";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -63,21 +64,10 @@ interface Props extends WithStyles<typeof styles> {}
 const App = (props: Props) => {
   const { classes } = props;
 
-  let testBlind: Blind = new Blind("Test Blinds", {
-    address: "localhost",
-    password: "123pass"
-  });
-  let otherBlind: Blind = new Blind("Other blinds", {
-    address: "1.255.02.3",
-    password: "pass123"
-  });
-  let testStats: IStats = {
-    indoorTemp: 21,
-    outdoorTemp: 20,
-    cloudCoverage: "Low",
-    motorPosition: 0
-  };
-  const [blinds, setBlinds] = useState([testBlind, otherBlind]);
+  const testBlinds = config.testCases.blinds;
+  let testStats = config.testCases.stats[0];
+
+  const [blinds, setBlinds] = useState(testBlinds);
   const [currentBlind, setBlind] = useState();
   const [title, setTitle] = useState("Smart Blinds");
 
@@ -88,7 +78,7 @@ const App = (props: Props) => {
     if (blinds.length < 1) {
       return;
     }
-    blinds[0].getStatus().then(statusResponse => {
+    blinds[0].getStatus().then((statusResponse: IStats) => {
       setStats(statusResponse);
     });
   }, [blinds]);
@@ -99,6 +89,7 @@ const App = (props: Props) => {
   }
 
   var location = useLocation();
+
   useEffect(() => {
     if (location.pathname === config.root + config.defaultPath) {
       setTitle(config.mainTitle);
@@ -124,10 +115,15 @@ const App = (props: Props) => {
             )}
           />
           <Route
+            exact
             path={config.root + "/blind"}
             render={props => <BlindMenu {...props} blind={currentBlind} />}
           />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
+          <Route
+            path={config.root + "/blind/createSchedule"}
+            render={props => <CreateSchedule {...props} blind={currentBlind} />}
+          />
           <Redirect to={config.root + config.defaultPath} />
         </Switch>
       </ThemeProvider>

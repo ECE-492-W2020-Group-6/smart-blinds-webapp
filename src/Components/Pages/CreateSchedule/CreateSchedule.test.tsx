@@ -12,9 +12,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import CreateSchedule from "./CreateSchedule";
+import Blind from "../../../res/Classes/Blind";
+import { BrowserRouter } from "react-router-dom";
+import config from "../../../config";
 
-it("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<CreateSchedule />, div);
-  ReactDOM.unmountComponentAtNode(div);
+config.testCases.blinds.forEach((testBlind: Blind) => {
+  it("renders without crashing", () => {
+    const div = document.createElement("div");
+    ReactDOM.render(
+      <BrowserRouter>
+        <CreateSchedule blind={testBlind} />
+      </BrowserRouter>,
+      div
+    );
+    ReactDOM.unmountComponentAtNode(div);
+  });
 });
