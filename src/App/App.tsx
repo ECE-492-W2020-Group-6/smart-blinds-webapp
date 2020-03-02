@@ -121,7 +121,7 @@ const App = (props: Props) => {
           />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
           <Route
-            path={config.root + "/blind/createschedule"}
+            path={config.root + "/blind/createSchedule"}
             render={props => <CreateSchedule {...props} blind={currentBlind} />}
           />
           <Redirect to={config.root + config.defaultPath} />
