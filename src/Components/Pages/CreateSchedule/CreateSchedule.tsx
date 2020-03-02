@@ -33,6 +33,8 @@ import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import { daysList } from "../../../res/blindTypes";
 import { wrap } from "module";
+import { ISchedule } from "../../../res/Interfaces";
+import { stringify } from "querystring";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -61,11 +63,15 @@ const styles = (theme: Theme) =>
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "scroll",
-      height: "100vh",
+      height: "70vh",
       margin: theme.spacing(1)
     },
     dayHeader: {
       textAlign: "center"
+    },
+    timeLegend: {
+      textAlign: "right",
+      paddingRight: theme.spacing(2)
     },
     timeSlot: {},
     title: {
@@ -85,6 +91,15 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 /**
+ * @param title slot title
+ * @param colour slot colour
+ */
+interface ITimeSlotUI {
+  title?: string;
+  colour?: string;
+}
+
+/**
  * The [[CreateSchedule]] functional component acts as the
  * UI for creating and setting schedules
  * @param props used to pass in stylings and the blind object
@@ -93,6 +108,7 @@ interface Props extends WithStyles<typeof styles> {
 const CreateSchedule: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
+  const [tempSchedule, setTempSchedule] = useState(schedule);
 
   useEffect(() => {
     if (blind === undefined) {
@@ -110,8 +126,9 @@ const CreateSchedule: React.FC<Props> = props => {
   ].map((title: string, i: number) => (
     <Typography className={classes.dayHeader}>{title}</Typography>
   ));
-  var timeLegend = [];
-  for (let i = 0; i < 100 * 4; i++) {
+
+  const timeLegend: ITimeSlotUI[] = [];
+  for (let i = 0; i < 24 * 4; i++) {
     let hour: number = Math.floor(i / 4);
     let period: string = hour > 11 ? "PM" : "AM";
     if (period === "PM" && hour !== 12) {
@@ -124,23 +141,48 @@ const CreateSchedule: React.FC<Props> = props => {
     let timeString: string = `${hour}:${
       minute === 0 ? "00" : minute
     } ${period} `;
-    // timeString +=
-    timeLegend.push(timeString);
+    timeLegend.push({ title: timeString });
+  }
+
+  let emptySlot: ITimeSlotUI = { title: "?" };
+  let emptyArray: ITimeSlotUI[] = [];
+  for (let i = 0; i < 7; i++) {
+    emptyArray.push(emptySlot);
+  }
+  let scheduleArray: ITimeSlotUI[] = [];
+  timeLegend.forEach((time: ITimeSlotUI) =>
+    scheduleArray.push(time, ...emptyArray)
+  );
+
+  function makeSlotTile(item: ITimeSlotUI, i: number) {
+    let className = classes.timeSlot;
+    let borderLeft = 0;
+    let borderTop = i < 8 ? 1 : 0;
+    let borderBottom = Math.floor(i / 8) % 4 === 3 ? 2 : 1;
+    let borderColor = "primary.main";
+    if (i % 8 === 0) {
+      borderLeft = 1;
+      className = classes.timeLegend;
+    }
+    return (
+      <Box
+        borderRight={1}
+        borderTop={borderTop}
+        borderLeft={borderLeft}
+        borderBottom={borderBottom}
+        borderColor={borderColor}
+        className={className}
+      >
+        {item.title}
+      </Box>
+    );
   }
 
   var calendarGrid = (
     <GridList spacing={0} cellHeight="auto" cols={8}>
-      {timeLegend.map((item: string, i: number) => (
-        <GridListTile key={item} cols={1}>
-          <Box
-            border={1}
-            borderTop={i < 8 ? 1 : 0}
-            borderRight={0}
-            borderColor="primary.main"
-            className={classes.timeSlot}
-          >
-            {item}
-          </Box>
+      {scheduleArray.map((item: ITimeSlotUI, i: number) => (
+        <GridListTile key={i} cols={1}>
+          {makeSlotTile(item, i)}
         </GridListTile>
       ))}
     </GridList>
@@ -172,5 +214,9 @@ const CreateSchedule: React.FC<Props> = props => {
     </React.Fragment>
   );
 };
+
+function arrayFromSchedule(schedule: ISchedule) {}
+
+function scheduleFromArray() {}
 
 export default withStyles(styles)(CreateSchedule);
