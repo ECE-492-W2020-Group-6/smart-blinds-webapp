@@ -23,7 +23,6 @@ import {
   Typography,
   GridList,
   GridListTile,
-  Card,
   Box
 } from "@material-ui/core";
 
@@ -32,9 +31,7 @@ import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import { daysList } from "../../../res/blindTypes";
-import { wrap } from "module";
 import { ISchedule } from "../../../res/Interfaces";
-import { stringify } from "querystring";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -45,9 +42,6 @@ const styles = (theme: Theme) =>
     root: {
       flexGrow: 1,
       padding: theme.spacing(0)
-      // flexDirection: "column",
-      // display: "flex",
-      // height: "100%"
     },
     weekWrapper: {
       display: "grid",
@@ -70,10 +64,16 @@ const styles = (theme: Theme) =>
       textAlign: "center"
     },
     timeLegend: {
-      textAlign: "right",
-      paddingRight: theme.spacing(2)
+      textAlign: "center",
+      alignItems: "center",
+      display: "grid",
+      height: theme.spacing(6),
+      borderBottomColor: "rgb(139, 195, 74)" //material ui is currently bugged, so this is required
     },
-    timeSlot: {},
+    timeSlot: {
+      height: theme.spacing(6),
+      borderBottomColor: "rgb(139, 195, 74)" //same here
+    },
     title: {
       flexGrow: 1,
       padding: theme.spacing(2)
@@ -144,7 +144,7 @@ const CreateSchedule: React.FC<Props> = props => {
     timeLegend.push({ title: timeString });
   }
 
-  let emptySlot: ITimeSlotUI = { title: "?" };
+  let emptySlot: ITimeSlotUI = { title: "" };
   let emptyArray: ITimeSlotUI[] = [];
   for (let i = 0; i < 7; i++) {
     emptyArray.push(emptySlot);
@@ -166,11 +166,11 @@ const CreateSchedule: React.FC<Props> = props => {
     }
     return (
       <Box
-        borderRight={1}
-        borderTop={borderTop}
-        borderLeft={borderLeft}
         borderBottom={borderBottom}
         borderColor={borderColor}
+        borderTop={borderTop}
+        borderLeft={borderLeft}
+        border={1}
         className={className}
       >
         {item.title}
