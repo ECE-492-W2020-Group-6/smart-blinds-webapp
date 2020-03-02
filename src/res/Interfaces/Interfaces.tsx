@@ -1,3 +1,5 @@
+import { BLIND_MODE } from "../blindTypes";
+
 /**
  * Entity Names:
  *  IStats
@@ -72,6 +74,6 @@ export interface ITimeSlot {
  * @var percentage operating magnitude
  */
 export interface IBlindMode {
-  type: "LIGHT" | "ECO";
+  type: BLIND_MODE;
   percentage?: number;
 }

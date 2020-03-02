@@ -19,7 +19,6 @@ import {
   ITimeSlot
 } from "../../Interfaces";
 import config from "../../../config";
-import { networkInterfaces } from "os";
 import { daysList } from "../../blindTypes";
 
 /**

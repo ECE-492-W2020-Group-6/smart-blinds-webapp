@@ -109,6 +109,7 @@ const CreateSchedule: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
   const [tempSchedule, setTempSchedule] = useState(schedule);
+  const [mode, setMode] = useState(config.defaultObjects.blindMode);
 
   useEffect(() => {
     if (blind === undefined) {
@@ -120,12 +121,13 @@ const CreateSchedule: React.FC<Props> = props => {
   }, [blind]);
 
   let dayTitle = (day: string) => day[0].toLocaleUpperCase() + day.slice(1, 3);
-  var weekDays = [
-    "Time",
-    ...daysList.map((day: string) => dayTitle(day))
-  ].map((title: string, i: number) => (
-    <Typography className={classes.dayHeader}>{title}</Typography>
-  ));
+  var weekDays = ["Time", ...daysList.map((day: string) => dayTitle(day))].map(
+    (title: string, i: number) => (
+      <Typography key={title} className={classes.dayHeader}>
+        {title}
+      </Typography>
+    )
+  );
 
   const timeLegend: ITimeSlotUI[] = [];
   for (let i = 0; i < 24 * 4; i++) {
@@ -172,6 +174,7 @@ const CreateSchedule: React.FC<Props> = props => {
         borderLeft={borderLeft}
         border={1}
         className={className}
+        onClick={() => console.log("nice")}
       >
         {item.title}
       </Box>
@@ -215,8 +218,8 @@ const CreateSchedule: React.FC<Props> = props => {
   );
 };
 
-function arrayFromSchedule(schedule: ISchedule) {}
+// function arrayFromSchedule(schedule: ISchedule) {}
 
-function scheduleFromArray() {}
+// function scheduleFromArray() {}
 
 export default withStyles(styles)(CreateSchedule);
