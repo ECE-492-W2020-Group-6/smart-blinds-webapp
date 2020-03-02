@@ -20,24 +20,7 @@ import {
 } from "../../Interfaces";
 import config from "../../../config";
 import { networkInterfaces } from "os";
-
-type DAY_OF_WEEK =
-  | "monday"
-  | "tuesday"
-  | "wednesday"
-  | "thursday"
-  | "friday"
-  | "saturday"
-  | "sunday";
-const convertDay: DAY_OF_WEEK[] = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday"
-];
+import { daysList } from "../../blindTypes";
 
 /**
  * Abstracts Smart Blind operation
@@ -80,11 +63,11 @@ class Blind {
   }
 
   /**
-   * @returns current behaviour mode
+   * @returns current behavior mode
    */
   GetCurrentBehavior(schedule: ISchedule): IBlindMode {
     let now: Date = new Date();
-    let scheduleDay: ITimeSlot[] = schedule[convertDay[now.getUTCDay()]];
+    let scheduleDay: ITimeSlot[] = schedule[daysList[now.getUTCDay()]];
     if (scheduleDay.length === 0) {
       return schedule.defaultMode;
     }

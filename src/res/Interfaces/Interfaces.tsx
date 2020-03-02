@@ -41,7 +41,7 @@ export interface ICredentials {
 /**
  * Describes a schedule for a smart blind device to follow
  * @var defaultMode default operating mode
- * @var monday_to_sunday specified non-default behaviour times per day
+ * @var monday_to_sunday specified non-default behavior times per day
  */
 export interface ISchedule {
   defaultMode: IBlindMode;
