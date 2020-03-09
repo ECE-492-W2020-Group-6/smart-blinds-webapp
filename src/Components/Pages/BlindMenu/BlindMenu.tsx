@@ -12,7 +12,7 @@ import {
   ListItemText,
   Button
 } from "@material-ui/core";
-
+import HomeIcon from "@material-ui/icons/Home";
 import Brightness5Icon from "@material-ui/icons/Brightness5";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
@@ -111,6 +111,17 @@ const BlindMenu: React.FC<Props> = props => {
           Current Status:
         </Typography>
         <List className={classes.root}></List>
+        <ListItem>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText
+            secondary="Indoor Temperature"
+            primary={
+              stats === undefined ? LOADING_MESSAGE : `${stats.indoorTemp}°`
+            }
+          />
+        </ListItem>
         <ListItem>
           <ListItemIcon>
             {stats === undefined ? (

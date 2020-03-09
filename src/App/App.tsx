@@ -68,7 +68,7 @@ const App = (props: Props) => {
   let defaultStats = config.defaultObjects.stats;
 
   const [blinds, setBlinds] = useState(testBlinds);
-  const [currentBlind, setBlind] = useState();
+  const [currentBlind, setBlind] = useState(blinds[0]);
   const [title, setTitle] = useState("Smart Blinds");
 
   // temporary until the webserver is configured
@@ -76,22 +76,17 @@ const App = (props: Props) => {
 
   //set timer to update blinds every 5 seconds
   useEffect(() => {
-    updateStats();
-    // const interval = setInterval(() => {
-    //   updateStats();
-    //   console.log("triggered");
-    // }, 1000 * 5);
-    // return () => clearInterval(interval);
-  }, []);
-
-  function updateStats() {
-    if (blinds.length < 1) {
-      return;
-    }
-    blinds[0].getStatus().then((statusResponse: IStats) => {
+    currentBlind.getStatus().then((statusResponse: IStats) => {
       setStats(statusResponse);
     });
-  }
+    const interval = setInterval(() => {
+      currentBlind.getStatus().then((statusResponse: IStats) => {
+        console.log("updated");
+        setStats(statusResponse);
+      });
+    }, 1000 * 5);
+    return () => clearInterval(interval);
+  });
 
   function switchBlind(blind: Blind) {
     setBlind(blind);
