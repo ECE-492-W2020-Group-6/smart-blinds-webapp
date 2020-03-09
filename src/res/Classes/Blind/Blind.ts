@@ -16,7 +16,8 @@ import {
   IStats,
   ISchedule,
   IBlindMode,
-  ITimeSlot
+  ITimeSlot,
+  IBlindCommand
 } from "../../Interfaces";
 import config from "../../../config";
 import { daysList } from "../../blindTypes";
@@ -42,7 +43,7 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch("/temp");
+    let response = await this.BlindAPI.createFetch("/temp", "GET");
     let responseJSON = await response.clone().json();
     // let status: IStats = responseJSON.status;
     let status = {
@@ -117,7 +118,15 @@ class Blind {
    * @param schedule sends or configures a new schedule to a device
    */
   async setSchedule(schedule: ISchedule) {
-    this.BlindAPI.createFetch(JSON.stringify(schedule));
+    this.BlindAPI.createFetch("/schedule", "POST", JSON.stringify(schedule));
+    // let responseJSON = await response.clone().json();
+  }
+
+  /**
+   * @param command sends a new command to the device
+   */
+  async sendCommand(command: IBlindCommand) {
+    this.BlindAPI.createFetch("/command", "POST", JSON.stringify(command));
     // let responseJSON = await response.clone().json();
   }
 

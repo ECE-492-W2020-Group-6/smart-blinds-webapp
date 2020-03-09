@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import CommandModal from "../../Molecules/CommandModal";
+import { BLIND_MODE } from "../../../res/blindTypes";
 
 const LOADING_MESSAGE = "loading...";
 
@@ -87,9 +88,11 @@ const BlindMenu: React.FC<Props> = props => {
     });
   }, [blind]);
 
-  const sendCommand = () => {
-    return 0;
-  };
+  const sendCommand = (
+    mode: BLIND_MODE,
+    duration: number,
+    amount?: number
+  ) => {};
 
   return (
     <React.Fragment>

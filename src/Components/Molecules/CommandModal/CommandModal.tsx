@@ -16,8 +16,14 @@ import {
   createStyles,
   withStyles,
   WithStyles,
-  Modal
+  Modal,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@material-ui/core";
+import { BLIND_MODE } from "../../../res/blindTypes";
 
 /**
  * 'styles' allows for styling within typscript code.
@@ -31,11 +37,20 @@ const styles = (theme: Theme) =>
     },
     modalDiv: {
       position: "absolute",
-      width: 400,
+      width: "90%",
       backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
+      border: "2px solid",
+      borderRadius: "4px",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3)
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      midWidth: 120
+    },
+    inputs: {
+      display: "flex",
+      justifyContent: "left"
     }
   });
 
@@ -55,7 +70,7 @@ function getModalStyle() {
  * @param stats stats to display
  */
 interface Props extends WithStyles<typeof styles> {
-  sendCommand: () => void;
+  sendCommand: (mode: BLIND_MODE, duration: number, amount?: number) => void;
   open: boolean;
   handleClose: () => void;
 }
@@ -68,12 +83,49 @@ interface Props extends WithStyles<typeof styles> {
 const CommandModal: React.FC<Props> = props => {
   const { classes, open, handleClose, sendCommand } = props;
   const [modalStyle] = useState(getModalStyle);
+  const [duration, setDuration] = useState(30);
 
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setDuration(event.target.value as number);
+  };
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose}>
-        <div style={modalStyle} className={classes.modalDiv}>
-          Nice
+        <div
+          style={modalStyle}
+          className={classes.modalDiv}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          <h2 id="simple-modal-title">Manual Control</h2>
+          <p id="simple-modal-description">Control the blinds directly</p>
+          <div className={classes.inputs}>
+            <FormControl className={classes.formControl}>
+              <InputLabel>Duration</InputLabel>
+              <Select value={duration} onChange={handleChange}>
+                <MenuItem value={30}>30 Mins</MenuItem>
+                <MenuItem value={60}>1 Hour</MenuItem>
+                <MenuItem value={240}>4 Hours</MenuItem>
+                <MenuItem value={0}>Today</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              onClick={() => {
+                sendCommand("LIGHT", duration);
+                handleClose();
+              }}
+            >
+              Open
+            </Button>
+            <Button
+              onClick={() => {
+                sendCommand("DARK", duration);
+                handleClose();
+              }}
+            >
+              Close
+            </Button>
+          </div>
         </div>
       </Modal>
     </React.Fragment>
