@@ -7,17 +7,17 @@ class BlindAPI {
     this.credentials = credentials;
   }
 
-  async createFetch(body: any): Promise<Response> {
+  async createFetch(endpoint: string): Promise<Response> {
     let requestInit: RequestInit = {
-      method: "POST",
+      method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "text/json",
         Auth: this.credentials.password
-      },
-      body: body
+      }
+      // body: body
     };
-    return fetch(this.credentials.address, requestInit);
+    return fetch(this.credentials.address + endpoint, requestInit);
   }
 }
 
