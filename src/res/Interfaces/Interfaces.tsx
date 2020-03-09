@@ -77,3 +77,15 @@ export interface IBlindMode {
   type: BLIND_MODE;
   percentage?: number;
 }
+
+/**
+ * Describes a single manual command
+ * @var mode operating mode
+ * @var duration duration in minutes
+ * @var position tbd
+ */
+export interface IBlindCommand {
+  mode: BLIND_MODE;
+  duration: number;
+  position: number;
+}

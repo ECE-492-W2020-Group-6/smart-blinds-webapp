@@ -15,6 +15,15 @@ const defaultSchedule: ISchedule = {
   saturday: [],
   sunday: []
 };
+let realTestBlind: Blind = new Blind("Physical Test", {
+  address: "http://10.147.17.181:5000/api/v1",
+  password: ""
+});
+
+let localServerBlind: Blind = new Blind("Local Test", {
+  address: "http://127.0.0.1:5000/api/v1",
+  password: ""
+});
 
 let testBlind: Blind = new Blind("Test Blinds", {
   address: "localhost",
@@ -27,6 +36,13 @@ let otherBlind: Blind = new Blind("Other blinds", {
 const sampleStats: IStats = {
   indoorTemp: 21,
   outdoorTemp: 20,
+  cloudCoverage: "Low",
+  motorPosition: 0
+};
+
+const defaultStats: IStats = {
+  indoorTemp: 0,
+  outdoorTemp: 0,
   cloudCoverage: "Low",
   motorPosition: 0
 };
@@ -44,6 +60,7 @@ interface IConfig {
   defaultObjects: {
     schedule: ISchedule;
     blindMode: IBlindMode;
+    stats: IStats;
   };
 }
 
@@ -55,11 +72,12 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [testBlind, otherBlind]
+    blinds: [localServerBlind, realTestBlind, testBlind, otherBlind]
   },
   defaultObjects: {
     schedule: defaultSchedule,
-    blindMode: defaultBlindMode
+    blindMode: defaultBlindMode,
+    stats: defaultStats
   }
 };
 

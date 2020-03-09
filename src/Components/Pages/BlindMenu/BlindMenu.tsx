@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 // import { IStats } from "../../../res/Interfaces";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
+import CommandModal from "../../Molecules/CommandModal";
+import { BLIND_MODE } from "../../../res/blindTypes";
 
 const LOADING_MESSAGE = "loading...";
 
@@ -65,6 +67,14 @@ const BlindMenu: React.FC<Props> = props => {
   const [schedule, setSchedule] = useState();
   const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
 
+  const [modalOpen, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     if (blind === undefined) {
       return;
@@ -77,6 +87,22 @@ const BlindMenu: React.FC<Props> = props => {
       setStats(statsResponse);
     });
   }, [blind]);
+
+  const sendCommand = (
+    mode: BLIND_MODE,
+    duration: number,
+    position?: number
+  ) => {
+    let setPosition: number = 0;
+    if (position !== undefined) {
+      setPosition = position;
+    }
+    blind.sendCommand({
+      mode: mode,
+      duration: duration,
+      position: setPosition
+    });
+  };
 
   return (
     <React.Fragment>
@@ -123,7 +149,7 @@ const BlindMenu: React.FC<Props> = props => {
       </Paper>
       <Footer
         buttons={[
-          <Button component={Link} to={config.root + "/"} color="inherit">
+          <Button onClick={handleOpen} color="inherit">
             Manual Control
           </Button>,
           <Button
@@ -135,6 +161,11 @@ const BlindMenu: React.FC<Props> = props => {
           </Button>
         ]}
       />
+      <CommandModal
+        open={modalOpen}
+        handleClose={handleClose}
+        sendCommand={sendCommand}
+      ></CommandModal>
     </React.Fragment>
   );
 };
