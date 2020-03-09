@@ -20,6 +20,11 @@ let realTestBlind: Blind = new Blind("Physical Test", {
   password: ""
 });
 
+let localServerBlind: Blind = new Blind("Local Test", {
+  address: "http://127.0.0.1:5000/api/v1",
+  password: ""
+});
+
 let testBlind: Blind = new Blind("Test Blinds", {
   address: "localhost",
   password: "123pass"
@@ -67,7 +72,7 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [realTestBlind, testBlind, otherBlind]
+    blinds: [localServerBlind, realTestBlind, testBlind, otherBlind]
   },
   defaultObjects: {
     schedule: defaultSchedule,

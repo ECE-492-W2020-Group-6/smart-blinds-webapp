@@ -77,12 +77,12 @@ const App = (props: Props) => {
   //set timer to update blinds every 5 seconds
   useEffect(() => {
     updateStats();
-    const interval = setInterval(() => {
-      updateStats();
-      console.log("triggered");
-    }, 1000 * 5);
-    return () => clearInterval(interval);
-  });
+    // const interval = setInterval(() => {
+    //   updateStats();
+    //   console.log("triggered");
+    // }, 1000 * 5);
+    // return () => clearInterval(interval);
+  }, []);
 
   function updateStats() {
     if (blinds.length < 1) {

@@ -126,8 +126,13 @@ class Blind {
    * @param command sends a new command to the device
    */
   async sendCommand(command: IBlindCommand) {
-    this.BlindAPI.createFetch("/command", "POST", JSON.stringify(command));
-    // let responseJSON = await response.clone().json();
+    let response = await this.BlindAPI.createFetch(
+      "/command",
+      "POST",
+      JSON.stringify(command)
+    );
+    let responseJSON = await response.clone().json();
+    console.log(responseJSON);
   }
 
   /**

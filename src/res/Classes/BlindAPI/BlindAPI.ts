@@ -11,7 +11,7 @@ class BlindAPI {
   async createFetch(
     endpoint: string,
     method: VALID_METHOD,
-    body?: string
+    body?: any
   ): Promise<Response> {
     let requestInit: RequestInit = {};
     switch (method) {
@@ -31,14 +31,14 @@ class BlindAPI {
           method: method,
           mode: "cors",
           headers: {
-            "Content-Type": "text/json",
+            "Content-Type": "application/json",
             Auth: this.credentials.password
           },
           body: body
         };
         break;
     }
-
+    console.log(this.credentials.address + endpoint, requestInit);
     return fetch(this.credentials.address + endpoint, requestInit);
   }
 }

@@ -91,8 +91,18 @@ const BlindMenu: React.FC<Props> = props => {
   const sendCommand = (
     mode: BLIND_MODE,
     duration: number,
-    amount?: number
-  ) => {};
+    position?: number
+  ) => {
+    let setPosition: number = 0;
+    if (position !== undefined) {
+      setPosition = position;
+    }
+    blind.sendCommand({
+      mode: mode,
+      duration: duration,
+      position: setPosition
+    });
+  };
 
   return (
     <React.Fragment>

@@ -87,5 +87,5 @@ export interface IBlindMode {
 export interface IBlindCommand {
   mode: BLIND_MODE;
   duration: number;
-  postion: number;
+  position: number;
 }
