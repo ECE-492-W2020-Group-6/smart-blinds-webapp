@@ -132,16 +132,15 @@ const CommandModal: React.FC<Props> = props => {
               Close
             </Button>
           </div>
-          <Slider
+          {/* <Slider
             value={angle}
-            onChange={handleAngle}
             aria-labelledby="discrete-slider"
             valueLabelDisplay="auto"
             step={10}
             marks
             min={10}
             max={100}
-          />
+          /> */}
         </div>
       </Modal>
     </React.Fragment>
