@@ -103,6 +103,7 @@ const App = (props: Props) => {
           />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
           <Route
+            exact
             path={config.root + "/blind/createSchedule"}
             render={props => <CreateSchedule {...props} blind={currentBlind} />}
           />
