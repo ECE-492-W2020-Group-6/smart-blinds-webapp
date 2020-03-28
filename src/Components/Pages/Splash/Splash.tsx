@@ -31,6 +31,7 @@ import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
+import { useState, useEffect } from "react";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -56,7 +57,7 @@ const styles = (theme: Theme) =>
  * @param blindList list of blind objects to display
  */
 interface Props extends WithStyles<typeof styles> {
-  stats: IStats;
+  // stats: IStats;
   blindList: Blind[];
   switchBlind: (blind: Blind) => void;
 }
@@ -68,10 +69,29 @@ interface Props extends WithStyles<typeof styles> {
  * @returns React Element; the Splash page
  */
 const Splash: React.FC<Props> = props => {
-  const { stats, blindList, switchBlind, classes } = props;
+  const { blindList, switchBlind, classes } = props;
+
+  let defaultStats = config.defaultObjects.stats;
+  // temporary until the webserver is configured
+  const [currentStats, setStats] = useState(defaultStats);
+
+  // set timer to update blinds every 5 seconds
+  useEffect(() => {
+    blindList[0].getStatus().then((statusResponse: IStats) => {
+      setStats(statusResponse);
+    });
+    const interval = setInterval(() => {
+      blindList[0].getStatus().then((statusResponse: IStats) => {
+        console.log("updated");
+        setStats(statusResponse);
+      });
+    }, 1000 * 5);
+    return () => clearInterval(interval);
+  });
+
   return (
     <div className={classes.root}>
-      <StatusPaper stats={stats} />
+      <StatusPaper stats={currentStats} />
       <Divider />
       <List className={classes.list}>
         {blindList.map((blind: Blind) => (
