@@ -75,6 +75,7 @@ const styles = (theme: Theme) =>
       // height: theme.spacing(6),
       borderBottomColor: "rgb(139, 195, 74)", //same here
       tableLayout: "fixed",
+      borderSpacing: "0px",
       width: "calc(100% - 8px)",
       margin: theme.spacing(1)
     },
