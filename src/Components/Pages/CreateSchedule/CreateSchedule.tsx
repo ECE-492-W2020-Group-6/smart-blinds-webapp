@@ -30,7 +30,7 @@ import Blind from "../../../res/Classes/Blind";
 import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
-import { daysList } from "../../../res/blindTypes";
+import { daysList, BLIND_MODE } from "../../../res/blindTypes";
 import { ISchedule, ITimeSlot } from "../../../res/Interfaces";
 import ReactDataSheet from "react-datasheet";
 import "react-datasheet/lib/react-datasheet.css";
@@ -82,6 +82,26 @@ const styles = (theme: Theme) =>
     },
     fitTables: {
       width: "12.5%"
+    },
+    ecoClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.primary.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
+    },
+    lightClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.info.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
+    },
+    darkClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.grey[600]} !important`,
+      color: `${theme.palette.grey[50]} !important`
+    },
+    customClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.secondary.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
     }
   });
 
@@ -133,6 +153,13 @@ const CreateSchedule: React.FC<Props> = props => {
     return index;
   };
 
+  const modeClasses: { [mode: string]: string } = {
+    ECO: classes.ecoClass,
+    LIGHT: classes.lightClass,
+    DARK: classes.darkClass,
+    CUSTOM: classes.customClass
+  };
+
   let gridFromSchedule = (schedule: ISchedule) => {
     let grid: GridElement[][] = [];
     for (let day = 0; day < 7; day++) {
@@ -142,13 +169,19 @@ const CreateSchedule: React.FC<Props> = props => {
         if (grid[time] === undefined) {
           grid[time] = [];
         }
-        grid[time].push({ value: schedule.defaultMode.type });
+        grid[time].push({
+          value: schedule.defaultMode.type.toLowerCase(),
+          className: modeClasses[schedule.defaultMode.type],
+          readOnly: true
+        });
       }
+
       schedule[dayName].forEach((timeSlot: ITimeSlot) => {
         const startIdx = mapTimeToIndex(timeSlot.start);
         const endIdx = mapTimeToIndex(timeSlot.end);
         for (let idx = startIdx; idx < endIdx; idx++) {
-          grid[idx][day] = { value: timeSlot.mode.type };
+          grid[idx][day].value = timeSlot.mode.type.toLowerCase();
+          grid[idx][day].className = modeClasses[timeSlot.mode.type];
         }
       });
     }
@@ -208,6 +241,16 @@ const CreateSchedule: React.FC<Props> = props => {
       rowRenderer={props => (
         <tr className={classes.tableRow}>{props.children}</tr>
       )}
+      // cellRenderer={props => (
+      //   <div
+      //   // className={props.className}
+      //   // onMouseDown={props.onMouseDown}
+      //   // onMouseOver={props.onMouseOver}
+      //   // onDoubleClick={props.onDoubleClick}
+      //   >
+      //     {props.children}
+      //   </div>
+      // )}
       // onCellsChanged={changes => {
       //   const tempgrid = grid.map(row => [...row]);
       //   changes.forEach(({ cell, row, col }) => {
