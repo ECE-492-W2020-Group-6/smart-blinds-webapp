@@ -64,12 +64,12 @@ const styles = (theme: Theme) =>
     dayHeader: {
       textAlign: "center"
     },
-    timeLegend: {
+    tableRow: {
+      height: theme.spacing(6),
       textAlign: "center",
       alignItems: "center",
-      display: "grid",
-      height: theme.spacing(6),
-      borderBottomColor: "rgb(139, 195, 74)" //material ui is currently bugged, so this is required
+      padding: "0px"
+      // display: "grid"
     },
     timeTable: {
       // height: theme.spacing(6),
@@ -78,12 +78,8 @@ const styles = (theme: Theme) =>
       width: "calc(100% - 8px)",
       margin: theme.spacing(1)
     },
-    title: {
-      flexGrow: 1,
-      padding: theme.spacing(2)
-    },
-    list: {
-      padding: theme.spacing(0)
+    fitTables: {
+      width: "12.5%"
     }
   });
 
@@ -207,7 +203,9 @@ const CreateSchedule: React.FC<Props> = props => {
       data={grid}
       valueRenderer={cell => cell.value}
       className={classes.timeTable}
-      rowRenderer={props => <tr>{props.children}</tr>}
+      rowRenderer={props => (
+        <tr className={classes.tableRow}>{props.children}</tr>
+      )}
       // onCellsChanged={changes => {
       //   const tempgrid = grid.map(row => [...row]);
       //   changes.forEach(({ cell, row, col }) => {
@@ -228,7 +226,9 @@ const CreateSchedule: React.FC<Props> = props => {
           <tbody>{props.children}</tbody>
         </table>
       )}
-      rowRenderer={props => <tr>{props.children}</tr>}
+      rowRenderer={props => (
+        <tr className={classes.tableRow}>{props.children}</tr>
+      )}
     ></CalendarSheet>
   );
 
@@ -237,8 +237,14 @@ const CreateSchedule: React.FC<Props> = props => {
       <Paper className={classes.root}>
         <div className={classes.weekWrapper}>{weekDays}</div>
         <div className={classes.timeSlotWrapper}>
-          {/* {calendarLegend} */}
-          {calendarGrid}
+          <table>
+            <tbody>
+              <tr>
+                <td className={classes.fitTables}>{calendarLegend}</td>
+                <td>{calendarGrid}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </Paper>
       <Footer
