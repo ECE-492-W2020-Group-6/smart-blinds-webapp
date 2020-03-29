@@ -31,7 +31,9 @@ import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import { daysList } from "../../../res/blindTypes";
-import { ISchedule } from "../../../res/Interfaces";
+import { ISchedule, ITimeSlot } from "../../../res/Interfaces";
+import ReactDataSheet from "react-datasheet";
+import "react-datasheet/lib/react-datasheet.css";
 
 /**
  * 'styles' allows for styling within typescript code.
@@ -57,46 +59,61 @@ const styles = (theme: Theme) =>
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "scroll",
-      height: "70vh",
-      margin: theme.spacing(1)
+      height: "70vh"
     },
     dayHeader: {
       textAlign: "center"
     },
-    timeLegend: {
+    tableRow: {
+      height: theme.spacing(6),
       textAlign: "center",
       alignItems: "center",
-      display: "grid",
-      height: theme.spacing(6),
-      borderBottomColor: "rgb(139, 195, 74)" //material ui is currently bugged, so this is required
+      padding: "0px"
+      // display: "grid"
     },
-    timeSlot: {
-      height: theme.spacing(6),
-      borderBottomColor: "rgb(139, 195, 74)" //same here
+    timeTable: {
+      // height: theme.spacing(6),
+      borderBottomColor: "rgb(139, 195, 74)", //same here
+      tableLayout: "fixed",
+      borderSpacing: "0px",
+      width: "calc(100% - 8px)",
+      minWidth: theme.spacing(3),
+      margin: theme.spacing(1)
     },
-    title: {
-      flexGrow: 1,
-      padding: theme.spacing(2)
-    },
-    list: {
-      padding: theme.spacing(0)
+    fitTables: {
+      width: "12.5%"
     }
   });
+
+interface GridElement extends ReactDataSheet.Cell<GridElement, number> {
+  value: string | null;
+}
+
+class CalendarSheet extends ReactDataSheet<GridElement, number> {}
+
+//You can also strongly type all the Components or SFCs that you pass into ReactDataSheet.
+// let cellRenderer: ReactDataSheet.CellRenderer<GridElement, number> = props => {
+//   const backgroundStyle =
+//     props.cell.value && props.cell.value < 0 ? { color: "red" } : undefined;
+//   return (
+//     <td
+//       style={backgroundStyle}
+//       onMouseDown={props.onMouseDown}
+//       onMouseOver={props.onMouseOver}
+//       onDoubleClick={props.onDoubleClick}
+//       className="cell"
+//     >
+//       {props.children}
+//     </td>
+//   );
+// };
+
 /**
  * @typeparam <typeof styles>
  * @param blind the blind in question
  */
 interface Props extends WithStyles<typeof styles> {
   blind: Blind;
-}
-
-/**
- * @param title slot title
- * @param colour slot colour
- */
-interface ITimeSlotUI {
-  title?: string;
-  colour?: string;
 }
 
 /**
@@ -108,7 +125,41 @@ interface ITimeSlotUI {
 const CreateSchedule: React.FC<Props> = props => {
   const { classes, blind } = props;
   const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
-  const [tempSchedule, setTempSchedule] = useState(schedule);
+
+  let mapTimeToIndex = (time: Date) => {
+    let index = 0;
+    index += time.getHours() * 4;
+    index += Math.ceil(time.getMinutes() / 15) * 15;
+    return index;
+  };
+
+  let gridFromSchedule = (schedule: ISchedule) => {
+    let grid: GridElement[][] = [];
+    for (let day = 0; day < 7; day++) {
+      let dayName = daysList[day];
+
+      for (let time = 0; time < 24 * 4; time++) {
+        if (grid[time] === undefined) {
+          grid[time] = [];
+        }
+        grid[time].push({ value: schedule.defaultMode.type });
+      }
+      schedule[dayName].forEach((timeSlot: ITimeSlot) => {
+        const startIdx = mapTimeToIndex(timeSlot.start);
+        const endIdx = mapTimeToIndex(timeSlot.end);
+        for (let idx = startIdx; idx < endIdx; idx++) {
+          grid[idx][day] = { value: timeSlot.mode.type };
+        }
+      });
+    }
+    //  = [
+    //   [{ value: 1 }, { value: 3 }],
+    //   [{ value: 2 }, { value: 4 }]
+    // ];
+    return grid;
+  };
+
+  const [grid, setGrid] = useState(gridFromSchedule(schedule));
   const [mode, setMode] = useState(config.defaultObjects.blindMode);
 
   useEffect(() => {
@@ -129,7 +180,7 @@ const CreateSchedule: React.FC<Props> = props => {
     )
   );
 
-  const timeLegend: ITimeSlotUI[] = [];
+  let timeLegend: GridElement[][] = [];
   for (let i = 0; i < 24 * 4; i++) {
     let hour: number = Math.floor(i / 4);
     let period: string = hour > 11 ? "PM" : "AM";
@@ -143,59 +194,60 @@ const CreateSchedule: React.FC<Props> = props => {
     let timeString: string = `${hour}:${
       minute === 0 ? "00" : minute
     } ${period} `;
-    timeLegend.push({ title: timeString });
-  }
-
-  let emptySlot: ITimeSlotUI = { title: "" };
-  let emptyArray: ITimeSlotUI[] = [];
-  for (let i = 0; i < 7; i++) {
-    emptyArray.push(emptySlot);
-  }
-  let scheduleArray: ITimeSlotUI[] = [];
-  timeLegend.forEach((time: ITimeSlotUI) =>
-    scheduleArray.push(time, ...emptyArray)
-  );
-
-  function makeSlotTile(item: ITimeSlotUI, i: number) {
-    let className = classes.timeSlot;
-    let borderLeft = 0;
-    let borderTop = i < 8 ? 1 : 0;
-    let borderBottom = Math.floor(i / 8) % 4 === 3 ? 2 : 1;
-    let borderColor = "primary.main";
-    if (i % 8 === 0) {
-      borderLeft = 1;
-      className = classes.timeLegend;
+    if (timeLegend[i] === undefined) {
+      timeLegend[i] = [];
     }
-    return (
-      <Box
-        borderBottom={borderBottom}
-        borderColor={borderColor}
-        borderTop={borderTop}
-        borderLeft={borderLeft}
-        border={1}
-        className={className}
-        onClick={() => console.log("nice")}
-      >
-        {item.title}
-      </Box>
-    );
+    timeLegend[i].push({ value: timeString });
   }
 
   var calendarGrid = (
-    <GridList spacing={0} cellHeight="auto" cols={8}>
-      {scheduleArray.map((item: ITimeSlotUI, i: number) => (
-        <GridListTile key={i} cols={1}>
-          {makeSlotTile(item, i)}
-        </GridListTile>
-      ))}
-    </GridList>
+    <CalendarSheet
+      data={grid}
+      valueRenderer={cell => cell.value}
+      className={classes.timeTable}
+      rowRenderer={props => (
+        <tr className={classes.tableRow}>{props.children}</tr>
+      )}
+      // onCellsChanged={changes => {
+      //   const tempgrid = grid.map(row => [...row]);
+      //   changes.forEach(({ cell, row, col }) => {
+      //     grid[row][col] = { ...grid[row][col] };
+      //   });
+      //   setGrid(tempgrid);
+      // }}
+      // cellRenderer={cellRenderer}
+    ></CalendarSheet>
+  );
+
+  var calendarLegend = (
+    <CalendarSheet
+      data={timeLegend}
+      valueRenderer={cell => cell.value}
+      sheetRenderer={props => (
+        <table className={classes.timeTable}>
+          <tbody>{props.children}</tbody>
+        </table>
+      )}
+      rowRenderer={props => (
+        <tr className={classes.tableRow}>{props.children}</tr>
+      )}
+    ></CalendarSheet>
   );
 
   return (
     <React.Fragment>
       <Paper className={classes.root}>
         <div className={classes.weekWrapper}>{weekDays}</div>
-        <div className={classes.timeSlotWrapper}>{calendarGrid}</div>
+        <div className={classes.timeSlotWrapper}>
+          <table>
+            <tbody>
+              <tr>
+                <td className={classes.fitTables}>{calendarLegend}</td>
+                <td>{calendarGrid}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </Paper>
       <Footer
         buttons={[

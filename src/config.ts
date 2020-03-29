@@ -5,6 +5,14 @@ const defaultBlindMode: IBlindMode = {
   type: "ECO"
 };
 
+const onBlindMode: IBlindMode = {
+  type: "LIGHT"
+};
+
+const date = new Date("2020-03-22T06:00:00Z");
+var end = new Date(date);
+end.setHours(4);
+
 const defaultSchedule: ISchedule = {
   defaultMode: defaultBlindMode,
   monday: [],
@@ -13,7 +21,7 @@ const defaultSchedule: ISchedule = {
   thursday: [],
   friday: [],
   saturday: [],
-  sunday: []
+  sunday: [{ mode: onBlindMode, start: date, end: end }]
 };
 let realTestBlind: Blind = new Blind("Physical Test", {
   address: "http://10.147.17.181:5000/api/v1",

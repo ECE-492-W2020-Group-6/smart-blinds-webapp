@@ -21,7 +21,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Slider
 } from "@material-ui/core";
 import { BLIND_MODE } from "../../../res/blindTypes";
 
@@ -84,9 +85,13 @@ const CommandModal: React.FC<Props> = props => {
   const { classes, open, handleClose, sendCommand } = props;
   const [modalStyle] = useState(getModalStyle);
   const [duration, setDuration] = useState(30);
+  const [angle, setAngle] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setDuration(event.target.value as number);
+  };
+  const handleAngle = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setAngle(event.target.value as number);
   };
   return (
     <React.Fragment>
@@ -109,6 +114,7 @@ const CommandModal: React.FC<Props> = props => {
                 <MenuItem value={0}>Today</MenuItem>
               </Select>
             </FormControl>
+
             <Button
               onClick={() => {
                 sendCommand("LIGHT", duration);
@@ -126,6 +132,15 @@ const CommandModal: React.FC<Props> = props => {
               Close
             </Button>
           </div>
+          {/* <Slider
+            value={angle}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={10}
+            marks
+            min={10}
+            max={100}
+          /> */}
         </div>
       </Modal>
     </React.Fragment>

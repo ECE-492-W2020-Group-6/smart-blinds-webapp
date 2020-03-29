@@ -33,7 +33,7 @@ import Splash from "../Components/Pages/Splash";
 import ViewSchedules from "../Components/Pages/ViewSchedules";
 import BlindMenu from "../Components/Pages/BlindMenu";
 import Blind from "../res/Classes/Blind";
-import { IStats } from "../res/Interfaces";
+// import { IStats } from "../res/Interfaces";
 import CreateSchedule from "../Components/Pages/CreateSchedule";
 
 /**
@@ -65,33 +65,10 @@ const App = (props: Props) => {
   const { classes } = props;
 
   const testBlinds = config.testCases.blinds;
-  let defaultStats = config.defaultObjects.stats;
 
   const [blinds, setBlinds] = useState(testBlinds);
-  const [currentBlind, setBlind] = useState();
+  const [currentBlind, setBlind] = useState(blinds[0]);
   const [title, setTitle] = useState("Smart Blinds");
-
-  // temporary until the webserver is configured
-  const [currentStats, setStats] = useState(defaultStats);
-
-  //set timer to update blinds every 5 seconds
-  useEffect(() => {
-    updateStats();
-    // const interval = setInterval(() => {
-    //   updateStats();
-    //   console.log("triggered");
-    // }, 1000 * 5);
-    // return () => clearInterval(interval);
-  }, []);
-
-  function updateStats() {
-    if (blinds.length < 1) {
-      return;
-    }
-    blinds[0].getStatus().then((statusResponse: IStats) => {
-      setStats(statusResponse);
-    });
-  }
 
   function switchBlind(blind: Blind) {
     setBlind(blind);
@@ -116,12 +93,7 @@ const App = (props: Props) => {
             exact
             path={config.root + "/"}
             render={props => (
-              <Splash
-                {...props}
-                stats={currentStats}
-                blindList={blinds}
-                switchBlind={switchBlind}
-              />
+              <Splash {...props} blindList={blinds} switchBlind={switchBlind} />
             )}
           />
           <Route
@@ -131,6 +103,7 @@ const App = (props: Props) => {
           />
           <Route path={config.root + "/schedules"} component={ViewSchedules} />
           <Route
+            exact
             path={config.root + "/blind/createSchedule"}
             render={props => <CreateSchedule {...props} blind={currentBlind} />}
           />
