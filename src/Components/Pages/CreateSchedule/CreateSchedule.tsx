@@ -59,8 +59,7 @@ const styles = (theme: Theme) =>
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "scroll",
-      height: "70vh",
-      margin: theme.spacing(1)
+      height: "70vh"
     },
     dayHeader: {
       textAlign: "center"
@@ -72,9 +71,12 @@ const styles = (theme: Theme) =>
       height: theme.spacing(6),
       borderBottomColor: "rgb(139, 195, 74)" //material ui is currently bugged, so this is required
     },
-    timeSlot: {
-      height: theme.spacing(6),
-      borderBottomColor: "rgb(139, 195, 74)" //same here
+    timeTable: {
+      // height: theme.spacing(6),
+      borderBottomColor: "rgb(139, 195, 74)", //same here
+      tableLayout: "fixed",
+      width: "100%",
+      margin: theme.spacing(1)
     },
     title: {
       flexGrow: 1,
@@ -127,9 +129,6 @@ const CreateSchedule: React.FC<Props> = props => {
   const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
 
   let mapTimeToIndex = (time: Date) => {
-    let hour = time.getHours();
-    let minute = time.getMinutes();
-    console.log("hour, min", hour, minute);
     let index = 0;
     index += time.getHours() * 4;
     index += Math.ceil(time.getMinutes() / 15) * 15;
@@ -150,7 +149,6 @@ const CreateSchedule: React.FC<Props> = props => {
       schedule[dayName].forEach((timeSlot: ITimeSlot) => {
         const startIdx = mapTimeToIndex(timeSlot.start);
         const endIdx = mapTimeToIndex(timeSlot.end);
-        console.log(startIdx, endIdx, "what");
         for (let idx = startIdx; idx < endIdx; idx++) {
           grid[idx][day] = { value: timeSlot.mode.type };
         }
@@ -184,7 +182,7 @@ const CreateSchedule: React.FC<Props> = props => {
     )
   );
 
-  let timeLegend: string[] = [];
+  let timeLegend: GridElement[][] = [];
   for (let i = 0; i < 24 * 4; i++) {
     let hour: number = Math.floor(i / 4);
     let period: string = hour > 11 ? "PM" : "AM";
@@ -198,13 +196,18 @@ const CreateSchedule: React.FC<Props> = props => {
     let timeString: string = `${hour}:${
       minute === 0 ? "00" : minute
     } ${period} `;
-    timeLegend.push(timeString);
+    if (timeLegend[i] === undefined) {
+      timeLegend[i] = [];
+    }
+    timeLegend[i].push({ value: timeString });
   }
 
   var calendarGrid = (
     <CalendarSheet
       data={grid}
       valueRenderer={cell => cell.value}
+      className={classes.timeTable}
+      rowRenderer={props => <tr>{props.children}</tr>}
       // onCellsChanged={changes => {
       //   const tempgrid = grid.map(row => [...row]);
       //   changes.forEach(({ cell, row, col }) => {
@@ -216,11 +219,27 @@ const CreateSchedule: React.FC<Props> = props => {
     ></CalendarSheet>
   );
 
+  var calendarLegend = (
+    <CalendarSheet
+      data={timeLegend}
+      valueRenderer={cell => cell.value}
+      sheetRenderer={props => (
+        <table className={classes.timeTable}>
+          <tbody>{props.children}</tbody>
+        </table>
+      )}
+      rowRenderer={props => <tr>{props.children}</tr>}
+    ></CalendarSheet>
+  );
+
   return (
     <React.Fragment>
       <Paper className={classes.root}>
         <div className={classes.weekWrapper}>{weekDays}</div>
-        <div className={classes.timeSlotWrapper}>{calendarGrid}</div>
+        <div className={classes.timeSlotWrapper}>
+          {/* {calendarLegend} */}
+          {calendarGrid}
+        </div>
       </Paper>
       <Footer
         buttons={[
