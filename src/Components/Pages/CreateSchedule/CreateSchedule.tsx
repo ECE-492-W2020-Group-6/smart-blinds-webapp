@@ -77,6 +77,7 @@ const styles = (theme: Theme) =>
       tableLayout: "fixed",
       borderSpacing: "0px",
       width: "calc(100% - 8px)",
+      minWidth: theme.spacing(3),
       margin: theme.spacing(1)
     },
     fitTables: {
