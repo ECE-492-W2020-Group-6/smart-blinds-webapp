@@ -23,7 +23,11 @@ import {
   Typography,
   GridList,
   GridListTile,
-  Box
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@material-ui/core";
 
 import Blind from "../../../res/Classes/Blind";
@@ -102,6 +106,10 @@ const styles = (theme: Theme) =>
       verticalAlign: "middle !important",
       background: `${theme.palette.secondary.light} !important`,
       color: `${theme.palette.grey[800]} !important`
+    },
+    typeSelect: {
+      display: "flex",
+      justifyContent: "space-around"
     }
   });
 
@@ -194,6 +202,10 @@ const CreateSchedule: React.FC<Props> = props => {
 
   const [grid, setGrid] = useState(gridFromSchedule(schedule));
   const [mode, setMode] = useState(config.defaultObjects.blindMode);
+  const [percentage, setPercentage] = useState(
+    mode.percentage ? mode.percentage : 0
+  );
+  const [selection, setSelection] = useState();
 
   useEffect(() => {
     if (blind === undefined) {
@@ -233,6 +245,17 @@ const CreateSchedule: React.FC<Props> = props => {
     timeLegend[i].push({ value: timeString });
   }
 
+  let applySelection = () => {
+    const tempgrid = grid.map(row => [...row]);
+    for (let i = selection.start.i; i <= selection.end.i; i++) {
+      for (let j = selection.start.j; j <= selection.end.j; j++) {
+        tempgrid[i][j].value = mode.type.toLowerCase();
+        tempgrid[i][j].className = modeClasses[mode.type];
+      }
+    }
+    setGrid(tempgrid);
+  };
+
   var calendarGrid = (
     <CalendarSheet
       data={grid}
@@ -241,6 +264,9 @@ const CreateSchedule: React.FC<Props> = props => {
       rowRenderer={props => (
         <tr className={classes.tableRow}>{props.children}</tr>
       )}
+      onSelect={(selection: ReactDataSheet.Selection) => {
+        setSelection(selection);
+      }}
       // cellRenderer={props => (
       //   <div
       //   // className={props.className}
@@ -277,6 +303,10 @@ const CreateSchedule: React.FC<Props> = props => {
     ></CalendarSheet>
   );
 
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setMode({ type: event.target.value as BLIND_MODE, percentage: percentage });
+  };
+
   return (
     <React.Fragment>
       <Paper className={classes.root}>
@@ -290,6 +320,25 @@ const CreateSchedule: React.FC<Props> = props => {
               </tr>
             </tbody>
           </table>
+        </div>
+        <div className={classes.typeSelect}>
+          <Typography>Timeslot mode</Typography>
+          <FormControl>
+            {/* <InputLabel>Type</InputLabel> */}
+            <Select value={mode.type} onChange={handleChange}>
+              <MenuItem value={"ECO"}>Eco</MenuItem>
+              <MenuItem value={"LIGHT"}>Light</MenuItem>
+              <MenuItem value={"DARK"}>Dark</MenuItem>
+              <MenuItem value={"CUSTOM"}>Custom</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            onClick={() => {
+              applySelection();
+            }}
+          >
+            Apply
+          </Button>
         </div>
       </Paper>
       <Footer
