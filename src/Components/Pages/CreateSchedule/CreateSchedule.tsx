@@ -23,15 +23,19 @@ import {
   Typography,
   GridList,
   GridListTile,
-  Box
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@material-ui/core";
 
 import Blind from "../../../res/Classes/Blind";
 import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
-import { daysList } from "../../../res/blindTypes";
-import { ISchedule, ITimeSlot } from "../../../res/Interfaces";
+import { daysList, BLIND_MODE } from "../../../res/blindTypes";
+import { ISchedule, ITimeSlot, IBlindMode } from "../../../res/Interfaces";
 import ReactDataSheet from "react-datasheet";
 import "react-datasheet/lib/react-datasheet.css";
 
@@ -82,11 +86,39 @@ const styles = (theme: Theme) =>
     },
     fitTables: {
       width: "12.5%"
+    },
+    ecoClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.primary.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
+    },
+    lightClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.info.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
+    },
+    darkClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.grey[600]} !important`,
+      color: `${theme.palette.grey[50]} !important`
+    },
+    customClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.secondary.light} !important`,
+      color: `${theme.palette.grey[800]} !important`
+    },
+    typeSelect: {
+      display: "flex",
+      justifyContent: "space-around"
     }
   });
 
 interface GridElement extends ReactDataSheet.Cell<GridElement, number> {
   value: string | null;
+}
+
+interface TimeGrid extends GridElement {
+  mode: IBlindMode;
 }
 
 class CalendarSheet extends ReactDataSheet<GridElement, number> {}
@@ -133,8 +165,15 @@ const CreateSchedule: React.FC<Props> = props => {
     return index;
   };
 
+  const modeClasses: { [mode: string]: string } = {
+    ECO: classes.ecoClass,
+    LIGHT: classes.lightClass,
+    DARK: classes.darkClass,
+    CUSTOM: classes.customClass
+  };
+
   let gridFromSchedule = (schedule: ISchedule) => {
-    let grid: GridElement[][] = [];
+    let grid: TimeGrid[][] = [];
     for (let day = 0; day < 7; day++) {
       let dayName = daysList[day];
 
@@ -142,25 +181,66 @@ const CreateSchedule: React.FC<Props> = props => {
         if (grid[time] === undefined) {
           grid[time] = [];
         }
-        grid[time].push({ value: schedule.defaultMode.type });
+        grid[time].push({
+          value: schedule.defaultMode.type.toLowerCase(),
+          mode: schedule.defaultMode,
+          className: modeClasses[schedule.defaultMode.type],
+          readOnly: true
+        });
       }
+
       schedule[dayName].forEach((timeSlot: ITimeSlot) => {
         const startIdx = mapTimeToIndex(timeSlot.start);
         const endIdx = mapTimeToIndex(timeSlot.end);
         for (let idx = startIdx; idx < endIdx; idx++) {
-          grid[idx][day] = { value: timeSlot.mode.type };
+          grid[idx][day].value = timeSlot.mode.type.toLowerCase();
+          grid[idx][day].mode = timeSlot.mode;
+          grid[idx][day].className = modeClasses[timeSlot.mode.type];
         }
       });
     }
-    //  = [
-    //   [{ value: 1 }, { value: 3 }],
-    //   [{ value: 2 }, { value: 4 }]
-    // ];
     return grid;
+  };
+
+  let scheduleFromGrid = (grid: TimeGrid[][]) => {
+    let newSchedule: ISchedule = config.defaultObjects.schedule;
+    newSchedule.defaultMode = mode;
+    let hoursFromIdx = (idx: number) => {
+      return padNumber(Math.floor(idx / 4));
+    };
+    let minsFromIdx = (idx: number) => {
+      return padNumber((idx % 24) * 15);
+    };
+    let padNumber = (val: number) => {
+      let str = String(val);
+      while (str.length < 2) {
+        str = "0" + str;
+      }
+      return str;
+    };
+    grid.forEach(time => {
+      for (let i = 0; i < time.length; i++) {
+        let block = time[i];
+        newSchedule[daysList[i]].push({
+          start: new Date(
+            `2020-03-22T${hoursFromIdx(i)}:${minsFromIdx(i)}:00Z`
+          ),
+          end: new Date(
+            `2020-03-22T${hoursFromIdx(i + 1)}:${minsFromIdx(i + 1)}:00Z`
+          ),
+          mode: block.mode
+        });
+      }
+    });
+    return newSchedule;
   };
 
   const [grid, setGrid] = useState(gridFromSchedule(schedule));
   const [mode, setMode] = useState(config.defaultObjects.blindMode);
+  const [percentage, setPercentage] = useState(
+    mode.percentage ? mode.percentage : 0
+  );
+  const [selection, setSelection] = useState();
 
   useEffect(() => {
     if (blind === undefined) {
@@ -170,6 +250,19 @@ const CreateSchedule: React.FC<Props> = props => {
       setSchedule(scheduleResponse);
     });
   }, [blind]);
+
+  useEffect(() => {
+    if (schedule === undefined) {
+      return;
+    }
+    setGrid(gridFromSchedule(schedule));
+  }, [schedule]);
+
+  let saveSchedule = () => {
+    let newSchedule: ISchedule = scheduleFromGrid(grid);
+    setSchedule(newSchedule);
+    blind.setSchedule(newSchedule);
+  };
 
   let dayTitle = (day: string) => day[0].toLocaleUpperCase() + day.slice(1, 3);
   var weekDays = ["Time", ...daysList.map((day: string) => dayTitle(day))].map(
@@ -200,6 +293,17 @@ const CreateSchedule: React.FC<Props> = props => {
     timeLegend[i].push({ value: timeString });
   }
 
+  let applySelection = () => {
+    const tempgrid = grid.map(row => [...row]);
+    for (let i = selection.start.i; i <= selection.end.i; i++) {
+      for (let j = selection.start.j; j <= selection.end.j; j++) {
+        tempgrid[i][j].value = mode.type.toLowerCase();
+        tempgrid[i][j].className = modeClasses[mode.type];
+      }
+    }
+    setGrid(tempgrid);
+  };
+
   var calendarGrid = (
     <CalendarSheet
       data={grid}
@@ -208,6 +312,19 @@ const CreateSchedule: React.FC<Props> = props => {
       rowRenderer={props => (
         <tr className={classes.tableRow}>{props.children}</tr>
       )}
+      onSelect={(selection: ReactDataSheet.Selection) => {
+        setSelection(selection);
+      }}
+      // cellRenderer={props => (
+      //   <div
+      //   // className={props.className}
+      //   // onMouseDown={props.onMouseDown}
+      //   // onMouseOver={props.onMouseOver}
+      //   // onDoubleClick={props.onDoubleClick}
+      //   >
+      //     {props.children}
+      //   </div>
+      // )}
       // onCellsChanged={changes => {
       //   const tempgrid = grid.map(row => [...row]);
       //   changes.forEach(({ cell, row, col }) => {
@@ -234,6 +351,10 @@ const CreateSchedule: React.FC<Props> = props => {
     ></CalendarSheet>
   );
 
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setMode({ type: event.target.value as BLIND_MODE, percentage: percentage });
+  };
+
   return (
     <React.Fragment>
       <Paper className={classes.root}>
@@ -248,13 +369,32 @@ const CreateSchedule: React.FC<Props> = props => {
             </tbody>
           </table>
         </div>
+        <div className={classes.typeSelect}>
+          <Typography>Timeslot mode</Typography>
+          <FormControl>
+            {/* <InputLabel>Type</InputLabel> */}
+            <Select value={mode.type} onChange={handleChange}>
+              <MenuItem value={"ECO"}>Eco</MenuItem>
+              <MenuItem value={"LIGHT"}>Light</MenuItem>
+              <MenuItem value={"DARK"}>Dark</MenuItem>
+              <MenuItem value={"CUSTOM"}>Custom</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            onClick={() => {
+              applySelection();
+            }}
+          >
+            Apply
+          </Button>
+        </div>
       </Paper>
       <Footer
         buttons={[
           <Button
-            // onClick={() => {
-            //   switchSchedule(schedule);
-            // }}
+            onClick={() => {
+              saveSchedule();
+            }}
             component={Link}
             to={config.root + "/blind"}
             color="inherit"
