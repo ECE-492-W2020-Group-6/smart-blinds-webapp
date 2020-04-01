@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/smart-blinds-webapp/precache-manifest.f4cc710b9bc241e4e1eab99f187a8756.js"
+  "/smart-blinds-webapp/precache-manifest.c4211b6854481828b5e233731f87ae47.js"
 );
 
 self.addEventListener('message', (event) => {
