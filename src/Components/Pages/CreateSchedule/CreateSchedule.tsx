@@ -35,7 +35,7 @@ import { Link } from "react-router-dom";
 import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import { daysList, BLIND_MODE } from "../../../res/blindTypes";
-import { ISchedule, ITimeSlot } from "../../../res/Interfaces";
+import { ISchedule, ITimeSlot, IBlindMode } from "../../../res/Interfaces";
 import ReactDataSheet from "react-datasheet";
 import "react-datasheet/lib/react-datasheet.css";
 
@@ -117,6 +117,10 @@ interface GridElement extends ReactDataSheet.Cell<GridElement, number> {
   value: string | null;
 }
 
+interface TimeGrid extends GridElement {
+  mode: IBlindMode;
+}
+
 class CalendarSheet extends ReactDataSheet<GridElement, number> {}
 
 //You can also strongly type all the Components or SFCs that you pass into ReactDataSheet.
@@ -169,7 +173,7 @@ const CreateSchedule: React.FC<Props> = props => {
   };
 
   let gridFromSchedule = (schedule: ISchedule) => {
-    let grid: GridElement[][] = [];
+    let grid: TimeGrid[][] = [];
     for (let day = 0; day < 7; day++) {
       let dayName = daysList[day];
 
@@ -179,6 +183,7 @@ const CreateSchedule: React.FC<Props> = props => {
         }
         grid[time].push({
           value: schedule.defaultMode.type.toLowerCase(),
+          mode: schedule.defaultMode,
           className: modeClasses[schedule.defaultMode.type],
           readOnly: true
         });
@@ -189,15 +194,45 @@ const CreateSchedule: React.FC<Props> = props => {
         const endIdx = mapTimeToIndex(timeSlot.end);
         for (let idx = startIdx; idx < endIdx; idx++) {
           grid[idx][day].value = timeSlot.mode.type.toLowerCase();
+          grid[idx][day].mode = timeSlot.mode;
           grid[idx][day].className = modeClasses[timeSlot.mode.type];
         }
       });
     }
-    //  = [
-    //   [{ value: 1 }, { value: 3 }],
-    //   [{ value: 2 }, { value: 4 }]
-    // ];
     return grid;
+  };
+
+  let scheduleFromGrid = (grid: TimeGrid[][]) => {
+    let newSchedule: ISchedule = config.defaultObjects.schedule;
+    newSchedule.defaultMode = mode;
+    let hoursFromIdx = (idx: number) => {
+      return padNumber(Math.floor(idx / 4));
+    };
+    let minsFromIdx = (idx: number) => {
+      return padNumber((idx % 24) * 15);
+    };
+    let padNumber = (val: number) => {
+      let str = String(val);
+      while (str.length < 2) {
+        str = "0" + str;
+      }
+      return str;
+    };
+    grid.forEach(time => {
+      for (let i = 0; i < time.length; i++) {
+        let block = time[i];
+        newSchedule[daysList[i]].push({
+          start: new Date(
+            `2020-03-22T${hoursFromIdx(i)}:${minsFromIdx(i)}:00Z`
+          ),
+          end: new Date(
+            `2020-03-22T${hoursFromIdx(i + 1)}:${minsFromIdx(i + 1)}:00Z`
+          ),
+          mode: block.mode
+        });
+      }
+    });
+    return newSchedule;
   };
 
   const [grid, setGrid] = useState(gridFromSchedule(schedule));
@@ -215,6 +250,19 @@ const CreateSchedule: React.FC<Props> = props => {
       setSchedule(scheduleResponse);
     });
   }, [blind]);
+
+  useEffect(() => {
+    if (schedule === undefined) {
+      return;
+    }
+    setGrid(gridFromSchedule(schedule));
+  }, [schedule]);
+
+  let saveSchedule = () => {
+    let newSchedule: ISchedule = scheduleFromGrid(grid);
+    setSchedule(newSchedule);
+    blind.setSchedule(newSchedule);
+  };
 
   let dayTitle = (day: string) => day[0].toLocaleUpperCase() + day.slice(1, 3);
   var weekDays = ["Time", ...daysList.map((day: string) => dayTitle(day))].map(
@@ -344,9 +392,9 @@ const CreateSchedule: React.FC<Props> = props => {
       <Footer
         buttons={[
           <Button
-            // onClick={() => {
-            //   switchSchedule(schedule);
-            // }}
+            onClick={() => {
+              saveSchedule();
+            }}
             component={Link}
             to={config.root + "/blind"}
             color="inherit"

@@ -28,13 +28,10 @@ const defaultSchedule: ISchedule = {
   monday: [],
   tuesday: [],
   wednesday: [],
-  thursday: [{ mode: offBlindMode, start: t2, end: t3 }],
+  thursday: [],
   friday: [],
   saturday: [],
-  sunday: [
-    { mode: onBlindMode, start: t1, end: t2 },
-    { mode: customBlindMode, start: t2, end: t3 }
-  ]
+  sunday: []
 };
 let realTestBlind: Blind = new Blind("Physical Test", {
   address: "http://10.147.17.181:5000/api/v1",
