@@ -27,7 +27,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Slider
 } from "@material-ui/core";
 
 import Blind from "../../../res/Classes/Blind";
@@ -108,8 +109,16 @@ const styles = (theme: Theme) =>
       color: `${theme.palette.grey[800]} !important`
     },
     typeSelect: {
+      // position: "fixed",
       display: "flex",
-      justifyContent: "space-around"
+      justifyContent: "space-around",
+      alignItems: "center",
+      width: "100%",
+      position: "absolute",
+      bottom: "60px"
+    },
+    slider: {
+      width: "20%"
     }
   });
 
@@ -351,8 +360,17 @@ const CreateSchedule: React.FC<Props> = props => {
     ></CalendarSheet>
   );
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleMode = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMode({ type: event.target.value as BLIND_MODE, percentage: percentage });
+  };
+  const handlePercentage = (
+    event: React.ChangeEvent<{}>,
+    value: number | number[]
+  ) => {
+    if (Array.isArray(value)) {
+      return;
+    }
+    setPercentage(value);
   };
 
   return (
@@ -369,17 +387,32 @@ const CreateSchedule: React.FC<Props> = props => {
             </tbody>
           </table>
         </div>
-        <div className={classes.typeSelect}>
+        <Paper className={classes.typeSelect}>
           <Typography>Timeslot mode</Typography>
           <FormControl>
             {/* <InputLabel>Type</InputLabel> */}
-            <Select value={mode.type} onChange={handleChange}>
+            <Select value={mode.type} onChange={handleMode}>
               <MenuItem value={"ECO"}>Eco</MenuItem>
               <MenuItem value={"LIGHT"}>Light</MenuItem>
               <MenuItem value={"DARK"}>Dark</MenuItem>
               <MenuItem value={"CUSTOM"}>Custom</MenuItem>
             </Select>
           </FormControl>
+          {mode.type === "CUSTOM" ? (
+            <Slider
+              className={classes.slider}
+              min={-100}
+              max={100}
+              step={10}
+              value={percentage}
+              onChange={handlePercentage}
+              aria-labelledby="continuous-slider"
+            ></Slider>
+          ) : (
+            ""
+          )}
+          {mode.type === "CUSTOM" ? <Typography>{percentage}</Typography> : ""}
+
           <Button
             onClick={() => {
               applySelection();
@@ -387,7 +420,7 @@ const CreateSchedule: React.FC<Props> = props => {
           >
             Apply
           </Button>
-        </div>
+        </Paper>
       </Paper>
       <Footer
         buttons={[
