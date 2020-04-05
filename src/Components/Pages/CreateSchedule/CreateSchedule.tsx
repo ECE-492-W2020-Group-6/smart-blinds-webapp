@@ -211,7 +211,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
       return padNumber(Math.floor(idx / 4));
     };
     let minsFromIdx = (idx: number) => {
-      return padNumber((idx % 24) * 15);
+      return padNumber((idx % 4) * 15);
     };
     let padNumber = (val: number) => {
       let str = String(val);
@@ -220,20 +220,20 @@ const CreateSchedule: React.FC<Props> = (props) => {
       }
       return str;
     };
-    grid.forEach((time) => {
-      for (let i = 0; i < time.length; i++) {
-        let block = time[i];
-        newSchedule[daysList[i]].push({
+    for (let idx = 0; idx < grid.length; idx++) {
+      for (let day = 0; day < grid[idx].length; day++) {
+        let block = grid[idx];
+        newSchedule[daysList[day]].push({
           start: new Date(
-            `2020-03-22T${hoursFromIdx(i)}:${minsFromIdx(i)}:00Z`
+            `2020-03-22T${hoursFromIdx(idx)}:${minsFromIdx(idx)}:00`
           ),
           end: new Date(
-            `2020-03-22T${hoursFromIdx(i + 1)}:${minsFromIdx(i + 1)}:00Z`
+            `2020-03-22T${hoursFromIdx(idx + 1)}:${minsFromIdx(idx + 1)}:00`
           ),
-          mode: block.mode,
+          mode: block[day].mode,
         });
       }
-    });
+    }
     return newSchedule;
   };
 
@@ -257,7 +257,6 @@ const CreateSchedule: React.FC<Props> = (props) => {
     }
     blind.getSchedule().then((scheduleResponse) => {
       setSchedule(scheduleResponse);
-      console.log("HEY", scheduleResponse);
     });
   }, [blind]);
 
@@ -273,6 +272,8 @@ const CreateSchedule: React.FC<Props> = (props) => {
 
   let saveSchedule = () => {
     let newSchedule: ISchedule = scheduleFromGrid(grid);
+    console.log("New", newSchedule);
+    console.log("from", grid);
     setSchedule(newSchedule);
     blind.setSchedule(newSchedule);
   };
@@ -315,6 +316,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
     for (let i = selection.start.i; i <= selection.end.i; i++) {
       for (let j = selection.start.j; j <= selection.end.j; j++) {
         tempgrid[i][j].value = modeNames[mode.type];
+        tempgrid[i][j].mode = mode;
         tempgrid[i][j].className = modeClasses[mode.type];
       }
     }
