@@ -8,7 +8,7 @@
  * Date Created:
  *  Feb 18, 2020
  * Derived From:
- *
+ *  React-datasheet
  *
  * Schedule builder UI
  */
@@ -21,11 +21,7 @@ import {
   Paper,
   Button,
   Typography,
-  GridList,
-  GridListTile,
-  Box,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Slider
@@ -131,23 +127,6 @@ interface TimeGrid extends GridElement {
 }
 
 class CalendarSheet extends ReactDataSheet<GridElement, number> {}
-
-//You can also strongly type all the Components or SFCs that you pass into ReactDataSheet.
-// let cellRenderer: ReactDataSheet.CellRenderer<GridElement, number> = props => {
-//   const backgroundStyle =
-//     props.cell.value && props.cell.value < 0 ? { color: "red" } : undefined;
-//   return (
-//     <td
-//       style={backgroundStyle}
-//       onMouseDown={props.onMouseDown}
-//       onMouseOver={props.onMouseOver}
-//       onDoubleClick={props.onDoubleClick}
-//       className="cell"
-//     >
-//       {props.children}
-//     </td>
-//   );
-// };
 
 /**
  * @typeparam <typeof styles>
@@ -328,24 +307,6 @@ const CreateSchedule: React.FC<Props> = props => {
       onSelect={(selection: ReactDataSheet.Selection) => {
         setSelection(selection);
       }}
-      // cellRenderer={props => (
-      //   <div
-      //   // className={props.className}
-      //   // onMouseDown={props.onMouseDown}
-      //   // onMouseOver={props.onMouseOver}
-      //   // onDoubleClick={props.onDoubleClick}
-      //   >
-      //     {props.children}
-      //   </div>
-      // )}
-      // onCellsChanged={changes => {
-      //   const tempgrid = grid.map(row => [...row]);
-      //   changes.forEach(({ cell, row, col }) => {
-      //     grid[row][col] = { ...grid[row][col] };
-      //   });
-      //   setGrid(tempgrid);
-      // }}
-      // cellRenderer={cellRenderer}
     ></CalendarSheet>
   );
 
@@ -415,7 +376,11 @@ const CreateSchedule: React.FC<Props> = props => {
           ) : (
             ""
           )}
-          {mode.type === "CUSTOM" ? <Typography>{percentage}</Typography> : ""}
+          {mode.type === "CUSTOM" ? (
+            <Typography>{percentage + "°"}</Typography>
+          ) : (
+            ""
+          )}
 
           <Button
             onClick={() => {

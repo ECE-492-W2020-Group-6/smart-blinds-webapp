@@ -22,7 +22,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Slider
+  Slider,
+  Typography
 } from "@material-ui/core";
 import { BLIND_MODE } from "../../../res/blindTypes";
 
@@ -51,7 +52,11 @@ const styles = (theme: Theme) =>
     },
     inputs: {
       display: "flex",
-      justifyContent: "left"
+      justifyContent: "left",
+      alignItems: "center"
+    },
+    slider: {
+      width: "20%"
     }
   });
 
@@ -85,13 +90,23 @@ const CommandModal: React.FC<Props> = props => {
   const { classes, open, handleClose, sendCommand } = props;
   const [modalStyle] = useState(getModalStyle);
   const [duration, setDuration] = useState(30);
+  const [mode, setMode] = useState<BLIND_MODE>("ECO");
   const [angle, setAngle] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleDuration = (event: React.ChangeEvent<{ value: unknown }>) => {
     setDuration(event.target.value as number);
   };
-  const handleAngle = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setAngle(event.target.value as number);
+  const handleMode = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setMode(event.target.value as BLIND_MODE);
+  };
+  const handleAngle = (
+    event: React.ChangeEvent<{}>,
+    value: number | number[]
+  ) => {
+    if (Array.isArray(value)) {
+      return;
+    }
+    setAngle(value);
   };
   return (
     <React.Fragment>
@@ -107,40 +122,51 @@ const CommandModal: React.FC<Props> = props => {
           <div className={classes.inputs}>
             <FormControl className={classes.formControl}>
               <InputLabel>Duration</InputLabel>
-              <Select value={duration} onChange={handleChange}>
+              <Select value={duration} onChange={handleDuration}>
                 <MenuItem value={30}>30 Mins</MenuItem>
                 <MenuItem value={60}>1 Hour</MenuItem>
                 <MenuItem value={240}>4 Hours</MenuItem>
                 <MenuItem value={0}>Today</MenuItem>
               </Select>
             </FormControl>
-
+            <FormControl className={classes.formControl}>
+              <InputLabel>Mode</InputLabel>
+              <Select value={mode} onChange={handleMode}>
+                <MenuItem value={"ECO"}>Eco</MenuItem>
+                <MenuItem value={"LIGHT"}>Light</MenuItem>
+                <MenuItem value={"DARK"}>Dark</MenuItem>
+                <MenuItem value={"CUSTOM"}>Other</MenuItem>
+              </Select>
+            </FormControl>
+            {mode === "CUSTOM" ? (
+              <Slider
+                className={classes.slider + " " + classes.formControl}
+                min={-100}
+                max={100}
+                step={10}
+                value={angle}
+                onChange={handleAngle}
+                aria-labelledby="continuous-slider"
+              ></Slider>
+            ) : (
+              ""
+            )}
+            {mode === "CUSTOM" ? (
+              <Typography className={classes.formControl}>
+                {angle + "°"}
+              </Typography>
+            ) : (
+              ""
+            )}
             <Button
               onClick={() => {
-                sendCommand("LIGHT", duration);
+                sendCommand(mode, duration, angle);
                 handleClose();
               }}
             >
-              Open
-            </Button>
-            <Button
-              onClick={() => {
-                sendCommand("DARK", duration);
-                handleClose();
-              }}
-            >
-              Close
+              Send
             </Button>
           </div>
-          {/* <Slider
-            value={angle}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={10}
-            marks
-            min={10}
-            max={100}
-          /> */}
         </div>
       </Modal>
     </React.Fragment>
