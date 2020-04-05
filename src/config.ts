@@ -5,17 +5,17 @@ const defaultBlindMode: IBlindMode = {
   type: "ECO"
 };
 
-const onBlindMode: IBlindMode = {
-  type: "LIGHT"
-};
+// const onBlindMode: IBlindMode = {
+//   type: "LIGHT"
+// };
 
-const offBlindMode: IBlindMode = {
-  type: "DARK"
-};
+// const offBlindMode: IBlindMode = {
+//   type: "DARK"
+// };
 
-const customBlindMode: IBlindMode = {
-  type: "CUSTOM"
-};
+// const customBlindMode: IBlindMode = {
+//   type: "CUSTOM"
+// };
 
 const t1 = new Date("2020-03-22T06:00:00Z");
 var t2 = new Date(t1);

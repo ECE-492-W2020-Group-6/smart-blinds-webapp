@@ -57,9 +57,10 @@ const styles = (theme: Theme) =>
  * @param blindList list of blind objects to display
  */
 interface Props extends WithStyles<typeof styles> {
-  // stats: IStats;
   blindList: Blind[];
   switchBlind: (blind: Blind) => void;
+  addBlind: (blind: Blind) => void;
+  removeBlind: (idx: number) => void;
 }
 
 /**

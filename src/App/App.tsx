@@ -66,13 +66,23 @@ const App = (props: Props) => {
 
   const testBlinds = config.testCases.blinds;
 
-  const [blinds, setBlinds] = useState(testBlinds);
+  const [blinds, setBlinds] = useState<Blind[]>(testBlinds);
   const [currentBlind, setBlind] = useState(blinds[0]);
   const [title, setTitle] = useState("Smart Blinds");
 
   function switchBlind(blind: Blind) {
     setBlind(blind);
     setTitle(blind.getName());
+  }
+
+  function addBlind(blind: Blind) {
+    setBlinds([...blinds, blind]);
+  }
+
+  function removeBlind(idx: number) {
+    let blindsCopy: Blind[] = JSON.parse(JSON.stringify(blinds));
+    blindsCopy.splice(idx, 1);
+    setBlinds(blindsCopy);
   }
 
   var location = useLocation();
@@ -93,7 +103,13 @@ const App = (props: Props) => {
             exact
             path={config.root + "/"}
             render={props => (
-              <Splash {...props} blindList={blinds} switchBlind={switchBlind} />
+              <Splash
+                {...props}
+                blindList={blinds}
+                switchBlind={switchBlind}
+                addBlind={addBlind}
+                removeBlind={removeBlind}
+              />
             )}
           />
           <Route

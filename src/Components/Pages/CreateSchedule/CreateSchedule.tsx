@@ -239,12 +239,13 @@ const CreateSchedule: React.FC<Props> = props => {
     });
   }, [blind]);
 
-  useEffect(() => {
-    if (schedule === undefined) {
-      return;
-    }
-    setGrid(gridFromSchedule(schedule));
-  }, [schedule]);
+  // useEffect(() => {
+  //   if (schedule === undefined) {
+  //     return;
+  //   }
+
+  //   setGrid(gridFromSchedule(schedule));
+  // }, [schedule]);
 
   let saveSchedule = () => {
     let newSchedule: ISchedule = scheduleFromGrid(grid);
