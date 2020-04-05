@@ -273,6 +273,10 @@ const CreateSchedule: React.FC<Props> = props => {
     blind.setSchedule(newSchedule);
   };
 
+  let discardSchedule = () => {
+    setGrid(gridFromSchedule(schedule));
+  };
+
   let dayTitle = (day: string) => day[0].toLocaleUpperCase() + day.slice(1, 3);
   var weekDays = ["Time", ...daysList.map((day: string) => dayTitle(day))].map(
     (title: string, i: number) => (
@@ -434,7 +438,14 @@ const CreateSchedule: React.FC<Props> = props => {
           >
             Save
           </Button>,
-          <Button component={Link} to={config.root + "/blind"} color="inherit">
+          <Button
+            onClick={() => {
+              discardSchedule();
+            }}
+            component={Link}
+            to={config.root + "/blind"}
+            color="inherit"
+          >
             Cancel
           </Button>
         ]}
