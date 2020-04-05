@@ -55,6 +55,7 @@ const sampleStats: IStats = {
   indoorTemp: 21,
   // outdoorTemp: 20,
   // cloudCoverage: "Low",
+  mode: "DARK",
   motorPosition: 0,
 };
 
@@ -62,6 +63,7 @@ const defaultStats: IStats = {
   indoorTemp: 0,
   // outdoorTemp: 0,
   // cloudCoverage: "Low",
+  mode: "BALANCED",
   motorPosition: 0,
 };
 

@@ -48,6 +48,7 @@ class Blind {
     let status: IStats = {
       indoorTemp: responseJSON.temperature,
       motorPosition: responseJSON.position,
+      mode: responseJSON.mode,
     };
     const promise = new Promise<IStats>((resolve, reject) => {
       setTimeout(() => {
