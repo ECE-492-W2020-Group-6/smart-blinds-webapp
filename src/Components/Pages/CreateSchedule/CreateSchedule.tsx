@@ -247,22 +247,29 @@ const CreateSchedule: React.FC<Props> = (props) => {
     end: { i: 0, j: 0 },
   });
 
+  // blind.getSchedule().then((scheduleResponse) => {
+  //   setSchedule(scheduleResponse);
+  // });
+
   useEffect(() => {
     if (blind === undefined) {
       return;
     }
     blind.getSchedule().then((scheduleResponse) => {
       setSchedule(scheduleResponse);
+      console.log("HEY", scheduleResponse);
     });
   }, [blind]);
 
-  // useEffect(() => {
-  //   if (schedule === undefined) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (schedule === undefined) {
+      return;
+    }
 
-  //   setGrid(gridFromSchedule(schedule));
-  // }, [schedule]);
+    setGrid(gridFromSchedule(schedule));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schedule]);
 
   let saveSchedule = () => {
     let newSchedule: ISchedule = scheduleFromGrid(grid);

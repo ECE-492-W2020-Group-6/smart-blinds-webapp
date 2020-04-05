@@ -26,12 +26,12 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
-    }
+      padding: theme.spacing(2),
+    },
   });
 
 /**
@@ -47,8 +47,8 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; A material-ui 'paper' component displaying stats
  */
-const ScheduleBuilder: React.FC<Props> = props => {
-  const { classes, schedule } = props;
+const ScheduleBuilder: React.FC<Props> = (props) => {
+  // const { classes, schedule } = props;
   return <React.Fragment></React.Fragment>;
 };
 

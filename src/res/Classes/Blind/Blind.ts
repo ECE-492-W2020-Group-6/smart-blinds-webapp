@@ -19,7 +19,7 @@ import {
   ITimeSlot,
   IBlindCommand,
 } from "../../Interfaces";
-import config from "../../../config";
+// import config from "../../../config";
 import { daysList } from "../../blindTypes";
 
 /**
@@ -121,7 +121,26 @@ class Blind {
    * @param schedule sends or configures a new schedule to a device
    */
   async setSchedule(schedule: ISchedule) {
-    this.BlindAPI.createFetch("/schedule", "POST", JSON.stringify(schedule));
+    let convSchedule = {
+      default_mode: schedule.defaultMode.type,
+      default_pos: schedule.defaultMode.percentage,
+      schedule: {
+        monday: schedule.monday,
+        tuesday: schedule.tuesday,
+        wednesday: schedule.wednesday,
+        thursday: schedule.thursday,
+        friday: schedule.friday,
+        saturday: schedule.saturday,
+        sunday: schedule.sunday,
+      },
+      // timezone: new Date().getTimezoneOffset(),
+      timezone: "America/Edmonton",
+    };
+    this.BlindAPI.createFetch(
+      "/schedule",
+      "POST",
+      JSON.stringify(convSchedule)
+    );
     // let responseJSON = await response.clone().json();
   }
 
