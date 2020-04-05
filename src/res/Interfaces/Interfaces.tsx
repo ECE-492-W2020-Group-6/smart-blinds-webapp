@@ -76,7 +76,7 @@ export interface ITimeSlot {
  */
 export interface IBlindMode {
   type: BLIND_MODE;
-  percentage?: number;
+  percentage?: number | null;
 }
 
 /**
