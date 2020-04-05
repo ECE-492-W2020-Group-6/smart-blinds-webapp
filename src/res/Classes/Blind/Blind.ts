@@ -98,14 +98,14 @@ class Blind {
     let response = await this.BlindAPI.createFetch("/schedule", "GET");
     let responseJSON = await response.clone().json();
     let schedule: ISchedule = {
-      defaultMode: { type: responseJSON.default_mode },
-      monday: responseJSON.schedule.monday,
-      tuesday: responseJSON.schedule.tuesday,
-      wednesday: responseJSON.schedule.wednesday,
-      thursday: responseJSON.schedule.thursday,
-      friday: responseJSON.schedule.friday,
-      saturday: responseJSON.schedule.saturday,
-      sunday: responseJSON.schedule.sunday,
+      defaultMode: { type: responseJSON.default_mode, percentage: responseJSON.default_pos },
+      monday: responseJSON.schedule.monday.map( this.timeBlockFromjson ),
+      tuesday: responseJSON.schedule.tuesday.map( this.timeBlockFromjson ),
+      wednesday: responseJSON.schedule.wednesday.map( this.timeBlockFromjson ),
+      thursday: responseJSON.schedule.thursday.map( this.timeBlockFromjson ),
+      friday: responseJSON.schedule.friday.map( this.timeBlockFromjson ),
+      saturday: responseJSON.schedule.saturday.map( this.timeBlockFromjson ),
+      sunday: responseJSON.schedule.sunday.map( this.timeBlockFromjson ),
     };
     console.log(responseJSON);
     const promise = new Promise<ISchedule>((resolve, reject) => {
@@ -121,21 +121,23 @@ class Blind {
    * @param schedule sends or configures a new schedule to a device
    */
   async setSchedule(schedule: ISchedule) {
-    let convSchedule = {
-      default_mode: schedule.defaultMode.type,
-      default_pos: schedule.defaultMode.percentage,
-      schedule: {
-        monday: schedule.monday,
-        tuesday: schedule.tuesday,
-        wednesday: schedule.wednesday,
-        thursday: schedule.thursday,
-        friday: schedule.friday,
-        saturday: schedule.saturday,
-        sunday: schedule.sunday,
-      },
-      // timezone: new Date().getTimezoneOffset(),
-      timezone: "America/Edmonton",
-    };
+    // let convSchedule = {
+    //   default_mode: schedule.defaultMode.type,
+    //   default_pos: schedule.defaultMode.percentage,
+    //   schedule: {
+    //     monday: schedule.monday,
+    //     tuesday: schedule.tuesday,
+    //     wednesday: schedule.wednesday,
+    //     thursday: schedule.thursday,
+    //     friday: schedule.friday,
+    //     saturday: schedule.saturday,
+    //     sunday: schedule.sunday,
+    //   },
+    //   // timezone: new Date().getTimezoneOffset(),
+    //   timezone: "America/Edmonton",
+    // };
+    let convSchedule = this.scheduleToJson( schedule )
+
     this.BlindAPI.createFetch(
       "/schedule",
       "POST",
@@ -177,6 +179,58 @@ class Blind {
   getAddress(): string {
     return this.address;
   }
+
+
+  /**
+   * Custom JSONify for schedule to match server's specifications
+   */
+  private scheduleToJson( convSched: ISchedule ): Object {
+    let jsonData = {
+      default_mode: convSched.defaultMode.type,
+      default_pos: convSched.defaultMode.percentage,
+      timezone: "America/Edmonton",
+      schedule: {
+        monday: convSched.monday.map( this.timeBlockToJson ),
+        tuesday: convSched.tuesday.map( this.timeBlockToJson ),
+        wednesday: convSched.wednesday.map( this.timeBlockToJson ),
+        thursday: convSched.thursday.map( this.timeBlockToJson ),
+        friday: convSched.friday.map( this.timeBlockToJson ),
+        saturday: convSched.saturday.map( this.timeBlockToJson ),
+        sunday: convSched.sunday.map( this.timeBlockToJson )
+      }
+    };
+
+    return jsonData;
+  }
+
+  /**
+   * Custom JSONify for time blocks to match server's specifications
+   */
+  private timeBlockToJson( block: ITimeSlot ): Object {
+    let jsonData = {
+      start: block.start.getHours() + ":" + block.start.getMinutes(),
+      end: block.end.getHours() + ":" + block.end.getMinutes(),
+      mode: block.mode.type,
+      position: block.mode.percentage
+    };
+
+    return jsonData;
+  }
+
+  /**
+   * Custom deserializer for server formated time blocks 
+   * 
+   */
+  private timeBlockFromjson( jsonObj: any ): ITimeSlot {
+    let timeBlock: ITimeSlot = {
+      start: new Date( "2020-01-01T" + jsonObj.start ),
+      end: new Date( "2020-01-01T" + jsonObj.end ),
+      mode: { type: jsonObj.default_mode, percentage: jsonObj.default_pos }
+    };
+
+    return timeBlock;
+  }
+
 }
 
 export default Blind;
