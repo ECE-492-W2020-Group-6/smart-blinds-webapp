@@ -53,15 +53,15 @@ let otherBlind: Blind = new Blind("Other blinds", {
 });
 const sampleStats: IStats = {
   indoorTemp: 21,
-  outdoorTemp: 20,
-  cloudCoverage: "Low",
+  // outdoorTemp: 20,
+  // cloudCoverage: "Low",
   motorPosition: 0,
 };
 
 const defaultStats: IStats = {
   indoorTemp: 0,
-  outdoorTemp: 0,
-  cloudCoverage: "Low",
+  // outdoorTemp: 0,
+  // cloudCoverage: "Low",
   motorPosition: 0,
 };
 
@@ -86,7 +86,7 @@ const config: IConfig = {
   root: "/smart-blinds-webapp",
   defaultPath: "/",
   mainTitle: "Smart Blinds",
-  MOTORMIDPOINT: 50,
+  MOTORMIDPOINT: -30,
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],

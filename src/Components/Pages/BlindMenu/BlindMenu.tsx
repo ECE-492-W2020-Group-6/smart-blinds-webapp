@@ -10,7 +10,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Button
+  Button,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import Brightness5Icon from "@material-ui/icons/Brightness5";
@@ -26,6 +26,7 @@ import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import CommandModal from "../../Molecules/CommandModal";
 import { BLIND_MODE } from "../../../res/blindTypes";
+import { IStats } from "../../../res/Interfaces";
 
 const LOADING_MESSAGE = "loading...";
 
@@ -37,15 +38,15 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     list: {
-      padding: theme.spacing(0)
-    }
+      padding: theme.spacing(0),
+    },
   });
 /**
  * @typeparam <typeof styles>
@@ -61,10 +62,12 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings and the blind object
  * @returns React Element; the BlindMenu component
  */
-const BlindMenu: React.FC<Props> = props => {
+const BlindMenu: React.FC<Props> = (props) => {
   const { classes, blind } = props;
-  const [stats, setStats] = useState();
-  const [schedule, setSchedule] = useState();
+  const [stats, setStats] = useState<IStats>(config.defaultObjects.stats);
+  // const [schedule, setSchedule] = useState<ISchedule>(
+  //   config.defaultObjects.schedule
+  // );
   const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
 
   const [modalOpen, setOpen] = useState(false);
@@ -75,17 +78,21 @@ const BlindMenu: React.FC<Props> = props => {
     setOpen(false);
   };
 
+  function updateValues(blind: Blind) {
+    blind.getSchedule().then((scheduleResponse) => {
+      // setSchedule(scheduleResponse);
+      setblindMode(blind.GetCurrentBehavior(scheduleResponse));
+    });
+    blind.getStatus().then((statsResponse) => {
+      setStats(statsResponse);
+    });
+  }
+
   useEffect(() => {
     if (blind === undefined) {
       return;
     }
-    blind.getSchedule().then(scheduleResponse => {
-      setSchedule(scheduleResponse);
-      setblindMode(blind.GetCurrentBehavior(scheduleResponse));
-    });
-    blind.getStatus().then(statsResponse => {
-      setStats(statsResponse);
-    });
+    updateValues(blind);
   }, [blind]);
 
   const sendCommand = (
@@ -94,14 +101,21 @@ const BlindMenu: React.FC<Props> = props => {
     position?: number
   ) => {
     let setPosition: number = 0;
+
     if (position !== undefined) {
       setPosition = position;
     }
-    blind.sendCommand({
-      mode: mode,
-      duration: duration,
-      position: setPosition
-    });
+    let callback = (response: any) => {
+      updateValues(blind);
+    };
+    blind.sendCommand(
+      {
+        mode: mode,
+        duration: duration,
+        position: setPosition,
+      },
+      callback
+    );
   };
 
   return (
@@ -142,19 +156,19 @@ const BlindMenu: React.FC<Props> = props => {
 
         <ListItem>
           <ListItemIcon>
-            {schedule === undefined ? (
+            {blindMode === undefined ? (
               <AutorenewIcon />
-            ) : blindMode.type === "ECO" ? (
-              <EcoIcon />
+            ) : blindMode.type === "DARK" ? (
+              <Brightness3Icon />
             ) : blindMode.type === "LIGHT" ? (
               <Brightness5Icon />
             ) : (
-              <Brightness3Icon />
+              <EcoIcon />
             )}
           </ListItemIcon>
           <ListItemText
             secondary="Behavior"
-            primary={schedule === undefined ? LOADING_MESSAGE : blindMode.type} //convert
+            primary={blindMode === undefined ? LOADING_MESSAGE : blindMode.type} //convert
           />
         </ListItem>
       </Paper>
@@ -169,7 +183,7 @@ const BlindMenu: React.FC<Props> = props => {
             color="inherit"
           >
             Set Schedule
-          </Button>
+          </Button>,
         ]}
       />
       <CommandModal

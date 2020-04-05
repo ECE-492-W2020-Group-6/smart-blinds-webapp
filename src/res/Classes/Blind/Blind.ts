@@ -17,7 +17,7 @@ import {
   ISchedule,
   IBlindMode,
   ITimeSlot,
-  IBlindCommand
+  IBlindCommand,
 } from "../../Interfaces";
 import config from "../../../config";
 import { daysList } from "../../blindTypes";
@@ -43,23 +43,18 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch("/temp", "GET");
+    let response = await this.BlindAPI.createFetch("/status", "GET");
     let responseJSON = await response.clone().json();
-    // let status: IStats = responseJSON.status;
-    let status = {
-      // temp
+    let status: IStats = {
       indoorTemp: responseJSON.temperature,
-      outdoorTemp: -23,
-      cloudCoverage: "High",
-      motorPosition: 50
+      motorPosition: responseJSON.position,
     };
-
-    // const promise = new Promise<IStats>((resolve, reject) => {
-    //   setTimeout(() => {
-    //     resolve(status);
-    //   }, 500);
-    // });
-    return status;
+    const promise = new Promise<IStats>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(status);
+      }, 500);
+    });
+    return promise;
   }
 
   /**
@@ -100,11 +95,19 @@ class Blind {
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
-    // let response = await this.BlindAPI.createFetch("Status");
-    // let responseJSON = await response.clone().json();
-    // let schedule: ISchedule = responseJSON.status;
-
-    var schedule = config.testCases.schedules[0];
+    let response = await this.BlindAPI.createFetch("/schedule", "GET");
+    let responseJSON = await response.clone().json();
+    let schedule: ISchedule = {
+      defaultMode: { type: responseJSON.default_mode },
+      monday: responseJSON.schedule.monday,
+      tuesday: responseJSON.schedule.tuesday,
+      wednesday: responseJSON.schedule.wednesday,
+      thursday: responseJSON.schedule.thursday,
+      friday: responseJSON.schedule.friday,
+      saturday: responseJSON.schedule.saturday,
+      sunday: responseJSON.schedule.sunday,
+    };
+    console.log(responseJSON);
     const promise = new Promise<ISchedule>((resolve, reject) => {
       setTimeout(() => {
         resolve(schedule);
@@ -125,14 +128,14 @@ class Blind {
   /**
    * @param command sends a new command to the device
    */
-  async sendCommand(command: IBlindCommand) {
+  async sendCommand(command: IBlindCommand, callback: (response: any) => void) {
     let response = await this.BlindAPI.createFetch(
       "/command",
       "POST",
       JSON.stringify(command)
     );
     let responseJSON = await response.clone().json();
-    console.log(responseJSON);
+    callback(responseJSON);
   }
 
   /**
