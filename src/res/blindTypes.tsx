@@ -12,7 +12,7 @@
  * Type declarations and utilities
  */
 
-export type BLIND_MODE = "ECO" | "LIGHT" | "DARK" | "CUSTOM";
+export type BLIND_MODE = "ECO" | "LIGHT" | "DARK" | "BALANCED" | "MANUAL";
 export type DAY_OF_WEEK =
   | "sunday"
   | "monday"

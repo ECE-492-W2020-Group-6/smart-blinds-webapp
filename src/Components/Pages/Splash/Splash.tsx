@@ -23,12 +23,14 @@ import {
   ListItemText,
   Divider,
   ListItemIcon,
-  Paper
+  Paper,
+  Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
+import Footer from "../../../Components/Atoms/Footer";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
 import { useState, useEffect } from "react";
@@ -81,14 +83,14 @@ const Splash: React.FC<Props> = props => {
     blindList[0].getStatus().then((statusResponse: IStats) => {
       setStats(statusResponse);
     });
-    const interval = setInterval(() => {
-      blindList[0].getStatus().then((statusResponse: IStats) => {
-        console.log("updated");
-        setStats(statusResponse);
-      });
-    }, 1000 * 5);
-    return () => clearInterval(interval);
-  });
+    // const interval = setInterval(() => {
+    //   blindList[0].getStatus().then((statusResponse: IStats) => {
+    //     console.log("updated");
+    //     setStats(statusResponse);
+    //   });
+    // }, 1000 * 5);
+    // return () => clearInterval(interval);
+  }, [blindList]);
 
   return (
     <div className={classes.root}>
@@ -116,6 +118,19 @@ const Splash: React.FC<Props> = props => {
           </React.Fragment>
         ))}
       </List>
+      <Footer
+        buttons={[
+          <Button
+            // onClick={() => {
+            //   ;
+            // }}
+
+            color="inherit"
+          >
+            Add a Smart Blind
+          </Button>
+        ]}
+      />
     </div>
   );
 };

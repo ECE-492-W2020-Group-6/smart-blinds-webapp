@@ -2,7 +2,7 @@ import { ISchedule, IStats, IBlindMode } from "./res/Interfaces";
 import Blind from "../src/res/Classes/Blind";
 
 const defaultBlindMode: IBlindMode = {
-  type: "ECO"
+  type: "BALANCED",
 };
 
 // const onBlindMode: IBlindMode = {
@@ -31,38 +31,38 @@ const defaultSchedule: ISchedule = {
   thursday: [],
   friday: [],
   saturday: [],
-  sunday: []
+  sunday: [],
 };
 let realTestBlind: Blind = new Blind("Physical Test", {
   address: "http://10.147.17.181:5000/api/v1",
-  password: ""
+  password: "",
 });
 
 let localServerBlind: Blind = new Blind("Local Test", {
   address: "http://127.0.0.1:5000/api/v1",
-  password: ""
+  password: "",
 });
 
 let testBlind: Blind = new Blind("Test Blinds", {
   address: "localhost",
-  password: "123pass"
+  password: "123pass",
 });
 let otherBlind: Blind = new Blind("Other blinds", {
   address: "1.255.02.3",
-  password: "pass123"
+  password: "pass123",
 });
 const sampleStats: IStats = {
   indoorTemp: 21,
   outdoorTemp: 20,
   cloudCoverage: "Low",
-  motorPosition: 0
+  motorPosition: 0,
 };
 
 const defaultStats: IStats = {
   indoorTemp: 0,
   outdoorTemp: 0,
   cloudCoverage: "Low",
-  motorPosition: 0
+  motorPosition: 0,
 };
 
 interface IConfig {
@@ -90,13 +90,13 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [localServerBlind, realTestBlind, testBlind, otherBlind]
+    blinds: [localServerBlind, realTestBlind, testBlind, otherBlind],
   },
   defaultObjects: {
     schedule: defaultSchedule,
     blindMode: defaultBlindMode,
-    stats: defaultStats
-  }
+    stats: defaultStats,
+  },
 };
 
 export default config;

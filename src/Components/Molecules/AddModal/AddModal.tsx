@@ -23,7 +23,7 @@ import {
   Select,
   MenuItem,
   Slider,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { BLIND_MODE } from "../../../res/blindTypes";
 
@@ -35,7 +35,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0),
+      padding: theme.spacing(0)
     },
     modalDiv: {
       position: "absolute",
@@ -44,20 +44,20 @@ const styles = (theme: Theme) =>
       border: "2px solid",
       borderRadius: "4px",
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
+      padding: theme.spacing(2, 4, 3)
     },
     formControl: {
       margin: theme.spacing(1),
-      midWidth: 120,
+      midWidth: 120
     },
     inputs: {
       display: "flex",
       justifyContent: "left",
-      alignItems: "center",
+      alignItems: "center"
     },
     slider: {
-      width: "20%",
-    },
+      width: "20%"
+    }
   });
 
 function getModalStyle() {
@@ -67,7 +67,7 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+    transform: `translate(-${top}%, -${left}%)`
   };
 }
 
@@ -86,7 +86,7 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; A material-ui 'paper' component displaying stats
  */
-const CommandModal: React.FC<Props> = (props) => {
+const AddModal: React.FC<Props> = props => {
   const { classes, open, handleClose, sendCommand } = props;
   const [modalStyle] = useState(getModalStyle);
   const [duration, setDuration] = useState(30);
@@ -120,45 +120,6 @@ const CommandModal: React.FC<Props> = (props) => {
           <h2 id="simple-modal-title">Manual Control</h2>
           <p id="simple-modal-description">Control the blinds directly</p>
           <div className={classes.inputs}>
-            <FormControl className={classes.formControl}>
-              <InputLabel>Duration</InputLabel>
-              <Select value={duration} onChange={handleDuration}>
-                <MenuItem value={30}>30 Mins</MenuItem>
-                <MenuItem value={60}>1 Hour</MenuItem>
-                <MenuItem value={240}>4 Hours</MenuItem>
-                <MenuItem value={0}>Today</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel>Mode</InputLabel>
-              <Select value={mode} onChange={handleMode}>
-                <MenuItem value={"ECO"}>Eco</MenuItem>
-                <MenuItem value={"BALANCED"}>Balanced (Auto)</MenuItem>
-                <MenuItem value={"LIGHT"}>Light</MenuItem>
-                <MenuItem value={"DARK"}>Dark</MenuItem>
-                <MenuItem value={"MANUAL"}>Other</MenuItem>
-              </Select>
-            </FormControl>
-            {mode === "MANUAL" ? (
-              <Slider
-                className={classes.slider + " " + classes.formControl}
-                min={-100}
-                max={100}
-                step={10}
-                value={angle}
-                onChange={handleAngle}
-                aria-labelledby="continuous-slider"
-              ></Slider>
-            ) : (
-              ""
-            )}
-            {mode === "MANUAL" ? (
-              <Typography className={classes.formControl}>
-                {angle + "°"}
-              </Typography>
-            ) : (
-              ""
-            )}
             <Button
               onClick={() => {
                 sendCommand(mode, duration, angle);
@@ -174,4 +135,4 @@ const CommandModal: React.FC<Props> = (props) => {
   );
 };
 
-export default withStyles(styles)(CommandModal);
+export default withStyles(styles)(AddModal);
