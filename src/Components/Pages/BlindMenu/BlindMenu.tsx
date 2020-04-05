@@ -68,7 +68,7 @@ const BlindMenu: React.FC<Props> = (props) => {
   // const [schedule, setSchedule] = useState<ISchedule>(
   //   config.defaultObjects.schedule
   // );
-  const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
+  // const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
 
   const [modalOpen, setOpen] = useState(false);
   const handleOpen = () => {
@@ -79,10 +79,10 @@ const BlindMenu: React.FC<Props> = (props) => {
   };
 
   function updateValues(blind: Blind) {
-    blind.getSchedule().then((scheduleResponse) => {
-      // setSchedule(scheduleResponse);
-      setblindMode(blind.GetCurrentBehavior(scheduleResponse));
-    });
+    // blind.getSchedule().then((scheduleResponse) => {
+    //   // setSchedule(scheduleResponse);
+    //   setblindMode(blind.GetCurrentBehavior(scheduleResponse));
+    // });
     blind.getStatus().then((statsResponse) => {
       setStats(statsResponse);
     });
@@ -132,7 +132,9 @@ const BlindMenu: React.FC<Props> = (props) => {
           <ListItemText
             secondary="Indoor Temperature"
             primary={
-              stats === undefined ? LOADING_MESSAGE : `${stats.indoorTemp}°`
+              stats === undefined
+                ? LOADING_MESSAGE
+                : `${Number(stats.indoorTemp).toFixed(2)}°`
             }
           />
         </ListItem>
@@ -149,18 +151,20 @@ const BlindMenu: React.FC<Props> = (props) => {
           <ListItemText
             secondary="Motor Position"
             primary={
-              stats === undefined ? LOADING_MESSAGE : stats.motorPosition
+              stats === undefined
+                ? LOADING_MESSAGE
+                : `${Number(stats.motorPosition).toFixed(2)}°`
             } //convert
           />
         </ListItem>
 
         <ListItem>
           <ListItemIcon>
-            {blindMode === undefined ? (
+            {stats === undefined ? (
               <AutorenewIcon />
-            ) : blindMode.type === "DARK" ? (
+            ) : stats.mode === "DARK" ? (
               <Brightness3Icon />
-            ) : blindMode.type === "LIGHT" ? (
+            ) : stats.mode === "LIGHT" ? (
               <Brightness5Icon />
             ) : (
               <EcoIcon />
@@ -168,7 +172,7 @@ const BlindMenu: React.FC<Props> = (props) => {
           </ListItemIcon>
           <ListItemText
             secondary="Behavior"
-            primary={blindMode === undefined ? LOADING_MESSAGE : blindMode.type} //convert
+            primary={stats === undefined ? LOADING_MESSAGE : stats.mode} //convert
           />
         </ListItem>
       </Paper>

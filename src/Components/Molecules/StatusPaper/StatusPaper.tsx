@@ -76,7 +76,7 @@ const StatusPaper: React.FC<Props> = (props) => {
           </ListItemIcon>
           <ListItemText
             secondary="Indoor Temperature"
-            primary={`${stats.indoorTemp}°`}
+            primary={`${Number(stats.indoorTemp).toFixed(2)}°`}
           />
         </ListItem>
         {/* <ListItem>

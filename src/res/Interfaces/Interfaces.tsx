@@ -28,6 +28,7 @@ export interface IStats {
   // outdoorTemp: number;
   // cloudCoverage: string;
   motorPosition: number;
+  mode: BLIND_MODE;
 }
 
 /**
