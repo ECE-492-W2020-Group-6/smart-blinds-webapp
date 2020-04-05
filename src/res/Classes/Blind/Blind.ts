@@ -214,11 +214,28 @@ class Blind {
    * Custom JSONify for time blocks to match server's specifications
    */
   private timeBlockToJson(block: ITimeSlot): Object {
+    let pos = block.mode.percentage;
+    if (pos === undefined) {
+      pos = null;
+    }
+    let padNumber = (val: number) => {
+      let str = String(val);
+      while (str.length < 2) {
+        str = "0" + str;
+      }
+      return str;
+    };
     let jsonData = {
-      start: block.start.getHours() + ":" + block.start.getMinutes(),
-      end: block.end.getHours() + ":" + block.end.getMinutes(),
+      start:
+        padNumber(block.start.getHours()) +
+        ":" +
+        padNumber(block.start.getMinutes()),
+      end:
+        padNumber(block.end.getHours()) +
+        ":" +
+        padNumber(block.end.getMinutes()),
       mode: block.mode.type,
-      position: block.mode.percentage,
+      position: pos,
     };
 
     return jsonData;
@@ -232,7 +249,7 @@ class Blind {
     let timeBlock: ITimeSlot = {
       start: new Date("2020-01-01T" + jsonObj.start),
       end: new Date("2020-01-01T" + jsonObj.end),
-      mode: { type: jsonObj.default_mode, percentage: jsonObj.default_pos },
+      mode: { type: jsonObj.mode, percentage: jsonObj.position },
     };
 
     return timeBlock;

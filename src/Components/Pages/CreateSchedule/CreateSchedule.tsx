@@ -154,7 +154,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
   let mapTimeToIndex = (time: Date) => {
     let index = 0;
     index += time.getHours() * 4;
-    index += Math.ceil(time.getMinutes() / 15) * 15;
+    index += Math.ceil(time.getMinutes() / 15);
     return index;
   };
 
@@ -175,6 +175,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
   };
 
   let gridFromSchedule = (schedule: ISchedule) => {
+    console.log("newSChed", schedule);
     let grid: TimeGrid[][] = [];
     for (let day = 0; day < 7; day++) {
       let dayName = daysList[day];
@@ -223,13 +224,24 @@ const CreateSchedule: React.FC<Props> = (props) => {
     for (let idx = 0; idx < grid.length; idx++) {
       for (let day = 0; day < grid[idx].length; day++) {
         let block = grid[idx];
+        let endDate = new Date(
+          `2020-01-01T${hoursFromIdx(idx + 1)}:${minsFromIdx(idx + 1)}:00`
+        );
+        if (endDate.getMinutes() === 0) {
+          endDate.setMinutes(59);
+          if (endDate.getHours() === 0) {
+            endDate.setHours(23);
+          } else {
+            endDate.setHours(endDate.getHours() - 1);
+          }
+        } else {
+          endDate.setMinutes(endDate.getMinutes() - 1);
+        }
         newSchedule[daysList[day]].push({
           start: new Date(
-            `2020-03-22T${hoursFromIdx(idx)}:${minsFromIdx(idx)}:00`
+            `2020-01-01T${hoursFromIdx(idx)}:${minsFromIdx(idx)}:00`
           ),
-          end: new Date(
-            `2020-03-22T${hoursFromIdx(idx + 1)}:${minsFromIdx(idx + 1)}:00`
-          ),
+          end: endDate,
           mode: block[day].mode,
         });
       }
