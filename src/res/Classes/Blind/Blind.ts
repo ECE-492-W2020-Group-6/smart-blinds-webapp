@@ -111,7 +111,7 @@ class Blind {
       saturday: responseJSON.schedule.saturday.map(this.timeBlockFromjson),
       sunday: responseJSON.schedule.sunday.map(this.timeBlockFromjson),
     };
-    console.log(responseJSON);
+    console.log("RESPONSLDKFJ", responseJSON);
     const promise = new Promise<ISchedule>((resolve, reject) => {
       setTimeout(() => {
         resolve(schedule);

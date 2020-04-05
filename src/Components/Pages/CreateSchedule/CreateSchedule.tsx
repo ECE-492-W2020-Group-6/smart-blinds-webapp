@@ -227,15 +227,9 @@ const CreateSchedule: React.FC<Props> = (props) => {
         let endDate = new Date(
           `2020-01-01T${hoursFromIdx(idx + 1)}:${minsFromIdx(idx + 1)}:00`
         );
-        if (endDate.getMinutes() === 0) {
+        if (endDate.getMinutes() === 0 && endDate.getHours() === 0) {
+          endDate.setHours(23);
           endDate.setMinutes(59);
-          if (endDate.getHours() === 0) {
-            endDate.setHours(23);
-          } else {
-            endDate.setHours(endDate.getHours() - 1);
-          }
-        } else {
-          endDate.setMinutes(endDate.getMinutes() - 1);
         }
         newSchedule[daysList[day]].push({
           start: new Date(
