@@ -24,13 +24,14 @@ import {
   Divider,
   ListItemIcon,
   Paper,
-  Button
+  Button,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
 import Footer from "../../../Components/Atoms/Footer";
+import AddModal from "../../Molecules/AddModal";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
 import { useState, useEffect } from "react";
@@ -43,15 +44,15 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     list: {
-      padding: theme.spacing(0)
-    }
+      padding: theme.spacing(0),
+    },
   });
 /**
  * @typeparam <typeof styles>
@@ -71,7 +72,7 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; the Splash page
  */
-const Splash: React.FC<Props> = props => {
+const Splash: React.FC<Props> = (props) => {
   const { blindList, switchBlind, classes } = props;
 
   let defaultStats = config.defaultObjects.stats;
@@ -91,6 +92,14 @@ const Splash: React.FC<Props> = props => {
     // }, 1000 * 5);
     // return () => clearInterval(interval);
   }, [blindList]);
+
+  const [modalOpen, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -118,17 +127,16 @@ const Splash: React.FC<Props> = props => {
           </React.Fragment>
         ))}
       </List>
+      <AddModal
+        open={modalOpen}
+        handleClose={handleClose}
+        // sendCommand={sendCommand}
+      ></AddModal>
       <Footer
         buttons={[
-          <Button
-            // onClick={() => {
-            //   ;
-            // }}
-
-            color="inherit"
-          >
+          <Button onClick={handleOpen} color="inherit">
             Add a Smart Blind
-          </Button>
+          </Button>,
         ]}
       />
     </div>
