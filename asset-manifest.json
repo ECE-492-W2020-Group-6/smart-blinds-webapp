@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css",
-    "main.js": "/smart-blinds-webapp/static/js/main.050fc826.chunk.js",
-    "main.js.map": "/smart-blinds-webapp/static/js/main.050fc826.chunk.js.map",
+    "main.js": "/smart-blinds-webapp/static/js/main.ebe9760c.chunk.js",
+    "main.js.map": "/smart-blinds-webapp/static/js/main.ebe9760c.chunk.js.map",
     "runtime-main.js": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js",
     "runtime-main.js.map": "/smart-blinds-webapp/static/js/runtime-main.4cb32e1f.js.map",
     "static/css/2.157a592c.chunk.css": "/smart-blinds-webapp/static/css/2.157a592c.chunk.css",
-    "static/js/2.86829585.chunk.js": "/smart-blinds-webapp/static/js/2.86829585.chunk.js",
-    "static/js/2.86829585.chunk.js.map": "/smart-blinds-webapp/static/js/2.86829585.chunk.js.map",
+    "static/js/2.11167ba5.chunk.js": "/smart-blinds-webapp/static/js/2.11167ba5.chunk.js",
+    "static/js/2.11167ba5.chunk.js.map": "/smart-blinds-webapp/static/js/2.11167ba5.chunk.js.map",
     "index.html": "/smart-blinds-webapp/index.html",
-    "precache-manifest.42ded30f1e0513f8e54a9966bcd7141c.js": "/smart-blinds-webapp/precache-manifest.42ded30f1e0513f8e54a9966bcd7141c.js",
+    "precache-manifest.f1e201dc57b349dd9f7ba9ac940605bd.js": "/smart-blinds-webapp/precache-manifest.f1e201dc57b349dd9f7ba9ac940605bd.js",
     "service-worker.js": "/smart-blinds-webapp/service-worker.js",
     "static/css/2.157a592c.chunk.css.map": "/smart-blinds-webapp/static/css/2.157a592c.chunk.css.map",
     "static/css/main.34de6062.chunk.css.map": "/smart-blinds-webapp/static/css/main.34de6062.chunk.css.map",
-    "static/js/2.86829585.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.86829585.chunk.js.LICENSE.txt"
+    "static/js/2.11167ba5.chunk.js.LICENSE.txt": "/smart-blinds-webapp/static/js/2.11167ba5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4cb32e1f.js",
     "static/css/2.157a592c.chunk.css",
-    "static/js/2.86829585.chunk.js",
+    "static/js/2.11167ba5.chunk.js",
     "static/css/main.34de6062.chunk.css",
-    "static/js/main.050fc826.chunk.js"
+    "static/js/main.ebe9760c.chunk.js"
   ]
 }
