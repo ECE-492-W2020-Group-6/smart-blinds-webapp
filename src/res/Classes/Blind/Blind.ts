@@ -22,7 +22,7 @@ import {
 // import config from "../../../config";
 import { daysList } from "../../blindTypes";
 
-const API = "/api/v1";
+const DEFAULT_USER = "blindUser";
 
 /**
  * Abstracts Smart Blind operation
@@ -36,6 +36,9 @@ class Blind {
    * @param credentials credential object for access and authentication
    */
   constructor(name: string, credentials: ICredentials) {
+    if (credentials.username === undefined) {
+      credentials.username = DEFAULT_USER;
+    }
     this.BlindAPI = new BlindAPI(credentials);
     this.name = name;
     this.address = credentials.address;
@@ -45,7 +48,7 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch(API + "/status", "GET");
+    let response = await this.BlindAPI.createFetch("/status", "GET");
     let responseJSON = await response.clone().json();
     let status: IStats = {
       indoorTemp: responseJSON.temperature,
@@ -98,7 +101,7 @@ class Blind {
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
-    let response = await this.BlindAPI.createFetch(API + "/schedule", "GET");
+    let response = await this.BlindAPI.createFetch("/schedule", "GET");
     let responseJSON = await response.clone().json();
     let schedule: ISchedule = {
       defaultMode: {
@@ -145,7 +148,7 @@ class Blind {
     let convSchedule = this.scheduleToJson(schedule);
 
     this.BlindAPI.createFetch(
-      API + "/schedule",
+      "/schedule",
       "POST",
       JSON.stringify(convSchedule)
     );
@@ -155,12 +158,21 @@ class Blind {
   /**
    * @param command sends a new command to the device
    */
-  async sendCommand(command: IBlindCommand, callback: (response: any) => void) {
-    let response = await this.BlindAPI.createFetch(
-      API + "/command",
-      "POST",
-      JSON.stringify(command)
-    );
+  async sendCommand(
+    reset: boolean,
+    command: IBlindCommand,
+    callback: (response: any) => void
+  ) {
+    let response;
+    if (reset) {
+      response = await this.BlindAPI.createFetch("/command", "DELETE");
+    } else {
+      response = await this.BlindAPI.createFetch(
+        "/command",
+        "POST",
+        JSON.stringify(command)
+      );
+    }
     let responseJSON = await response.clone().json();
     callback(responseJSON);
   }

@@ -39,6 +39,7 @@ export interface IStats {
 export interface ICredentials {
   address: string;
   password: string;
+  username?: string;
 }
 
 /**

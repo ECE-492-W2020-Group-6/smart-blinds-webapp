@@ -35,12 +35,12 @@ const defaultSchedule: ISchedule = {
 };
 let realTestBlind: Blind = new Blind("Real Blind", {
   address: "http://10.147.17.181:5000",
-  password: "",
+  password: "password",
 });
 
 let localServerBlind: Blind = new Blind("Localhost", {
   address: "http://127.0.0.1:5000",
-  password: "",
+  password: "password",
 });
 
 // let testBlind: Blind = new Blind("Test Blinds", {
@@ -93,7 +93,7 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [localServerBlind, realTestBlind],
+    blinds: [realTestBlind, localServerBlind],
   },
   defaultObjects: {
     schedule: defaultSchedule,

@@ -96,6 +96,7 @@ const BlindMenu: React.FC<Props> = (props) => {
   }, [blind]);
 
   const sendCommand = (
+    reset: boolean,
     mode: BLIND_MODE,
     duration: number,
     position?: number
@@ -109,6 +110,7 @@ const BlindMenu: React.FC<Props> = (props) => {
       updateValues(blind);
     };
     blind.sendCommand(
+      reset,
       {
         mode: mode,
         duration: duration,
