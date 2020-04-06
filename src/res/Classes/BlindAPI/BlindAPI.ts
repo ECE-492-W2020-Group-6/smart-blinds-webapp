@@ -21,7 +21,9 @@ class BlindAPI {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        authorization: this.credentials.password,
+        authorization: `Basic ${btoa(
+          this.credentials.username + ":" + this.credentials.password
+        )}`,
       },
     };
 

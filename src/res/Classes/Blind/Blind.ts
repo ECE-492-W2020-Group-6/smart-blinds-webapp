@@ -22,6 +22,8 @@ import {
 // import config from "../../../config";
 import { daysList } from "../../blindTypes";
 
+const DEFAULT_USER = "blindUser";
+
 /**
  * Abstracts Smart Blind operation
  */
@@ -34,6 +36,9 @@ class Blind {
    * @param credentials credential object for access and authentication
    */
   constructor(name: string, credentials: ICredentials) {
+    if (credentials.username === undefined) {
+      credentials.username = DEFAULT_USER;
+    }
     this.BlindAPI = new BlindAPI(credentials);
     this.name = name;
     this.address = credentials.address;
