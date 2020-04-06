@@ -23,9 +23,13 @@ import {
   Select,
   MenuItem,
   Slider,
-  Typography
+  Typography,
+  TextField,
 } from "@material-ui/core";
-import { BLIND_MODE } from "../../../res/blindTypes";
+// import { BLIND_MODE } from "../../../res/blindTypes";
+import Blind from "../../../res/Classes/Blind";
+import { ICredentials } from "../../../res/Interfaces";
+import config from "../../../config";
 
 /**
  * 'styles' allows for styling within typscript code.
@@ -35,7 +39,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     modalDiv: {
       position: "absolute",
@@ -44,20 +48,22 @@ const styles = (theme: Theme) =>
       border: "2px solid",
       borderRadius: "4px",
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3)
+      padding: theme.spacing(2, 4, 3),
     },
     formControl: {
       margin: theme.spacing(1),
-      midWidth: 120
+      midWidth: 120,
+      maxWidth: 120,
     },
     inputs: {
       display: "flex",
       justifyContent: "left",
-      alignItems: "center"
+      alignItems: "center",
+      flexWrap: "wrap",
     },
     slider: {
-      width: "20%"
-    }
+      width: "20%",
+    },
   });
 
 function getModalStyle() {
@@ -67,7 +73,7 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+    transform: `translate(-${top}%, -${left}%)`,
   };
 }
 
@@ -76,7 +82,7 @@ function getModalStyle() {
  * @param stats stats to display
  */
 interface Props extends WithStyles<typeof styles> {
-  sendCommand: (mode: BLIND_MODE, duration: number, amount?: number) => void;
+  addBlind: (blind: Blind) => void;
   open: boolean;
   handleClose: () => void;
 }
@@ -86,28 +92,38 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; A material-ui 'paper' component displaying stats
  */
-const AddModal: React.FC<Props> = props => {
-  const { classes, open, handleClose, sendCommand } = props;
+const AddModal: React.FC<Props> = (props) => {
+  const { classes, open, handleClose, addBlind } = props;
   const [modalStyle] = useState(getModalStyle);
-  const [duration, setDuration] = useState(30);
-  const [mode, setMode] = useState<BLIND_MODE>("ECO");
-  const [angle, setAngle] = useState(0);
+  const [name, setName] = useState<string>("blinds");
+  const [creds, setCreds] = useState<ICredentials>(
+    config.defaultObjects.credentials
+  );
+  // const handleDuration = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setDuration(event.target.value as number);
+  // };
+  // const handleMode = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setMode(event.target.value as BLIND_MODE);
+  // };
 
-  const handleDuration = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setDuration(event.target.value as number);
+  const handleName = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setName(event.target.value as string);
   };
-  const handleMode = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setMode(event.target.value as BLIND_MODE);
+
+  const handlePassword = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setCreds({
+      address: creds.address,
+      password: event.target.value as string,
+    });
   };
-  const handleAngle = (
-    event: React.ChangeEvent<{}>,
-    value: number | number[]
-  ) => {
-    if (Array.isArray(value)) {
-      return;
-    }
-    setAngle(value);
+
+  const handleAddress = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setCreds({
+      address: event.target.value as string,
+      password: creds.password,
+    });
   };
+
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose}>
@@ -117,16 +133,45 @@ const AddModal: React.FC<Props> = props => {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <h2 id="simple-modal-title">Manual Control</h2>
-          <p id="simple-modal-description">Control the blinds directly</p>
+          <h2 id="simple-modal-title">New Connection</h2>
+          <p id="simple-modal-description">Add Smart Blinds</p>
           <div className={classes.inputs}>
+            <FormControl className={classes.formControl}>
+              <TextField
+                required
+                onChange={handleName}
+                id="standard-required"
+                label="Name"
+                defaultValue={name}
+              />
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <TextField
+                onChange={handleAddress}
+                required
+                id="standard-required"
+                label="IP"
+                defaultValue={creds.address}
+              />
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <TextField
+                onChange={handlePassword}
+                id="standard-password-input"
+                required
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+              />
+            </FormControl>
+
             <Button
               onClick={() => {
-                sendCommand(mode, duration, angle);
+                addBlind(new Blind(name, creds));
                 handleClose();
               }}
             >
-              Send
+              Add Blinds
             </Button>
           </div>
         </div>

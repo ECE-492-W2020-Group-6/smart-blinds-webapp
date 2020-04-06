@@ -54,6 +54,7 @@ const styles = (theme: Theme) =>
       display: "flex",
       justifyContent: "left",
       alignItems: "center",
+      flexWrap: "wrap",
     },
     slider: {
       width: "20%",
