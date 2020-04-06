@@ -93,7 +93,7 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [localServerBlind, realTestBlind],
+    blinds: [realTestBlind, localServerBlind],
   },
   defaultObjects: {
     schedule: defaultSchedule,
