@@ -25,9 +25,10 @@ import { BLIND_MODE } from "../blindTypes";
  */
 export interface IStats {
   indoorTemp: number;
-  outdoorTemp: number;
-  cloudCoverage: string;
+  // outdoorTemp: number;
+  // cloudCoverage: string;
   motorPosition: number;
+  mode: BLIND_MODE;
 }
 
 /**
@@ -75,7 +76,7 @@ export interface ITimeSlot {
  */
 export interface IBlindMode {
   type: BLIND_MODE;
-  percentage?: number;
+  percentage?: number | null;
 }
 
 /**

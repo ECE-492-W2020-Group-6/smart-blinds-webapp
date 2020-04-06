@@ -17,10 +17,12 @@ import {
   ISchedule,
   IBlindMode,
   ITimeSlot,
-  IBlindCommand
+  IBlindCommand,
 } from "../../Interfaces";
-import config from "../../../config";
+// import config from "../../../config";
 import { daysList } from "../../blindTypes";
+
+const API = "/api/v1";
 
 /**
  * Abstracts Smart Blind operation
@@ -43,23 +45,19 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch("/temp", "GET");
+    let response = await this.BlindAPI.createFetch(API + "/status", "GET");
     let responseJSON = await response.clone().json();
-    // let status: IStats = responseJSON.status;
-    let status = {
-      // temp
+    let status: IStats = {
       indoorTemp: responseJSON.temperature,
-      outdoorTemp: -23,
-      cloudCoverage: "High",
-      motorPosition: 50
+      motorPosition: responseJSON.position,
+      mode: responseJSON.mode,
     };
-
-    // const promise = new Promise<IStats>((resolve, reject) => {
-    //   setTimeout(() => {
-    //     resolve(status);
-    //   }, 500);
-    // });
-    return status;
+    const promise = new Promise<IStats>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(status);
+      }, 500);
+    });
+    return promise;
   }
 
   /**
@@ -100,11 +98,22 @@ class Blind {
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
-    // let response = await this.BlindAPI.createFetch("Status");
-    // let responseJSON = await response.clone().json();
-    // let schedule: ISchedule = responseJSON.status;
-
-    var schedule = config.testCases.schedules[0];
+    let response = await this.BlindAPI.createFetch(API + "/schedule", "GET");
+    let responseJSON = await response.clone().json();
+    let schedule: ISchedule = {
+      defaultMode: {
+        type: responseJSON.default_mode,
+        percentage: responseJSON.default_pos,
+      },
+      monday: responseJSON.schedule.monday.map(this.timeBlockFromjson),
+      tuesday: responseJSON.schedule.tuesday.map(this.timeBlockFromjson),
+      wednesday: responseJSON.schedule.wednesday.map(this.timeBlockFromjson),
+      thursday: responseJSON.schedule.thursday.map(this.timeBlockFromjson),
+      friday: responseJSON.schedule.friday.map(this.timeBlockFromjson),
+      saturday: responseJSON.schedule.saturday.map(this.timeBlockFromjson),
+      sunday: responseJSON.schedule.sunday.map(this.timeBlockFromjson),
+    };
+    // console.log("RESPONSLDKFJ", responseJSON);
     const promise = new Promise<ISchedule>((resolve, reject) => {
       setTimeout(() => {
         resolve(schedule);
@@ -118,21 +127,42 @@ class Blind {
    * @param schedule sends or configures a new schedule to a device
    */
   async setSchedule(schedule: ISchedule) {
-    this.BlindAPI.createFetch("/schedule", "POST", JSON.stringify(schedule));
+    // let convSchedule = {
+    //   default_mode: schedule.defaultMode.type,
+    //   default_pos: schedule.defaultMode.percentage,
+    //   schedule: {
+    //     monday: schedule.monday,
+    //     tuesday: schedule.tuesday,
+    //     wednesday: schedule.wednesday,
+    //     thursday: schedule.thursday,
+    //     friday: schedule.friday,
+    //     saturday: schedule.saturday,
+    //     sunday: schedule.sunday,
+    //   },
+    //   // timezone: new Date().getTimezoneOffset(),
+    //   timezone: "America/Edmonton",
+    // };
+    let convSchedule = this.scheduleToJson(schedule);
+
+    this.BlindAPI.createFetch(
+      API + "/schedule",
+      "POST",
+      JSON.stringify(convSchedule)
+    );
     // let responseJSON = await response.clone().json();
   }
 
   /**
    * @param command sends a new command to the device
    */
-  async sendCommand(command: IBlindCommand) {
+  async sendCommand(command: IBlindCommand, callback: (response: any) => void) {
     let response = await this.BlindAPI.createFetch(
-      "/command",
+      API + "/command",
       "POST",
       JSON.stringify(command)
     );
     let responseJSON = await response.clone().json();
-    console.log(responseJSON);
+    callback(responseJSON);
   }
 
   /**
@@ -154,6 +184,77 @@ class Blind {
    */
   getAddress(): string {
     return this.address;
+  }
+
+  /**
+   * Custom JSONify for schedule to match server's specifications
+   */
+  private scheduleToJson(convSched: ISchedule): Object {
+    let pos = convSched.defaultMode.percentage;
+    if (pos === undefined) {
+      pos = null;
+    }
+    let jsonData = {
+      default_mode: convSched.defaultMode.type,
+      default_pos: pos,
+      timezone: "America/Edmonton",
+      schedule: {
+        monday: convSched.monday.map(this.timeBlockToJson),
+        tuesday: convSched.tuesday.map(this.timeBlockToJson),
+        wednesday: convSched.wednesday.map(this.timeBlockToJson),
+        thursday: convSched.thursday.map(this.timeBlockToJson),
+        friday: convSched.friday.map(this.timeBlockToJson),
+        saturday: convSched.saturday.map(this.timeBlockToJson),
+        sunday: convSched.sunday.map(this.timeBlockToJson),
+      },
+    };
+
+    return jsonData;
+  }
+
+  /**
+   * Custom JSONify for time blocks to match server's specifications
+   */
+  private timeBlockToJson(block: ITimeSlot): Object {
+    let pos = block.mode.percentage;
+    if (pos === undefined) {
+      pos = null;
+    }
+    let padNumber = (val: number) => {
+      let str = String(val);
+      while (str.length < 2) {
+        str = "0" + str;
+      }
+      return str;
+    };
+    let jsonData = {
+      start:
+        padNumber(block.start.getHours()) +
+        ":" +
+        padNumber(block.start.getMinutes()),
+      end:
+        padNumber(block.end.getHours()) +
+        ":" +
+        padNumber(block.end.getMinutes()),
+      mode: block.mode.type,
+      position: pos,
+    };
+
+    return jsonData;
+  }
+
+  /**
+   * Custom deserializer for server formated time blocks
+   *
+   */
+  private timeBlockFromjson(jsonObj: any): ITimeSlot {
+    let timeBlock: ITimeSlot = {
+      start: new Date("2020-01-01T" + jsonObj.start),
+      end: new Date("2020-01-01T" + jsonObj.end),
+      mode: { type: jsonObj.mode, percentage: jsonObj.position },
+    };
+
+    return timeBlock;
   }
 }
 

@@ -23,12 +23,15 @@ import {
   ListItemText,
   Divider,
   ListItemIcon,
-  Paper
+  Paper,
+  Button,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import config from "../../../config";
 import StatusPaper from "../../../Components/Molecules/StatusPaper";
+import Footer from "../../../Components/Atoms/Footer";
+import AddModal from "../../Molecules/AddModal";
 import { IStats } from "../../../res/Interfaces";
 import Blind from "../../../res/Classes/Blind";
 import { useState, useEffect } from "react";
@@ -41,15 +44,15 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     list: {
-      padding: theme.spacing(0)
-    }
+      padding: theme.spacing(0),
+    },
   });
 /**
  * @typeparam <typeof styles>
@@ -57,9 +60,10 @@ const styles = (theme: Theme) =>
  * @param blindList list of blind objects to display
  */
 interface Props extends WithStyles<typeof styles> {
-  // stats: IStats;
   blindList: Blind[];
   switchBlind: (blind: Blind) => void;
+  addBlind: (blind: Blind) => void;
+  removeBlind: (idx: number) => void;
 }
 
 /**
@@ -68,8 +72,8 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; the Splash page
  */
-const Splash: React.FC<Props> = props => {
-  const { blindList, switchBlind, classes } = props;
+const Splash: React.FC<Props> = (props) => {
+  const { blindList, switchBlind, classes, addBlind } = props;
 
   let defaultStats = config.defaultObjects.stats;
   // temporary until the webserver is configured
@@ -80,14 +84,15 @@ const Splash: React.FC<Props> = props => {
     blindList[0].getStatus().then((statusResponse: IStats) => {
       setStats(statusResponse);
     });
-    const interval = setInterval(() => {
-      blindList[0].getStatus().then((statusResponse: IStats) => {
-        console.log("updated");
-        setStats(statusResponse);
-      });
-    }, 1000 * 5);
-    return () => clearInterval(interval);
-  });
+  }, [blindList]);
+
+  const [modalOpen, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -95,7 +100,7 @@ const Splash: React.FC<Props> = props => {
       <Divider />
       <List className={classes.list}>
         {blindList.map((blind: Blind) => (
-          <React.Fragment key={blind.getAddress()}>
+          <React.Fragment key={blind.getAddress() + blind.getName()}>
             <Paper>
               <ListItem
                 button
@@ -115,6 +120,18 @@ const Splash: React.FC<Props> = props => {
           </React.Fragment>
         ))}
       </List>
+      <AddModal
+        open={modalOpen}
+        handleClose={handleClose}
+        addBlind={addBlind}
+      ></AddModal>
+      <Footer
+        buttons={[
+          <Button onClick={handleOpen} color="inherit">
+            Add a Smart Blind
+          </Button>,
+        ]}
+      />
     </div>
   );
 };

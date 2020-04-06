@@ -10,7 +10,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Button
+  Button,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import Brightness5Icon from "@material-ui/icons/Brightness5";
@@ -26,6 +26,7 @@ import config from "../../../config";
 import Footer from "../../Atoms/Footer";
 import CommandModal from "../../Molecules/CommandModal";
 import { BLIND_MODE } from "../../../res/blindTypes";
+import { IStats } from "../../../res/Interfaces";
 
 const LOADING_MESSAGE = "loading...";
 
@@ -37,15 +38,15 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     list: {
-      padding: theme.spacing(0)
-    }
+      padding: theme.spacing(0),
+    },
   });
 /**
  * @typeparam <typeof styles>
@@ -61,11 +62,13 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings and the blind object
  * @returns React Element; the BlindMenu component
  */
-const BlindMenu: React.FC<Props> = props => {
+const BlindMenu: React.FC<Props> = (props) => {
   const { classes, blind } = props;
-  const [stats, setStats] = useState();
-  const [schedule, setSchedule] = useState();
-  const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
+  const [stats, setStats] = useState<IStats>(config.defaultObjects.stats);
+  // const [schedule, setSchedule] = useState<ISchedule>(
+  //   config.defaultObjects.schedule
+  // );
+  // const [blindMode, setblindMode] = useState(config.defaultObjects.blindMode);
 
   const [modalOpen, setOpen] = useState(false);
   const handleOpen = () => {
@@ -75,17 +78,21 @@ const BlindMenu: React.FC<Props> = props => {
     setOpen(false);
   };
 
+  function updateValues(blind: Blind) {
+    // blind.getSchedule().then((scheduleResponse) => {
+    //   // setSchedule(scheduleResponse);
+    //   setblindMode(blind.GetCurrentBehavior(scheduleResponse));
+    // });
+    blind.getStatus().then((statsResponse) => {
+      setStats(statsResponse);
+    });
+  }
+
   useEffect(() => {
     if (blind === undefined) {
       return;
     }
-    blind.getSchedule().then(scheduleResponse => {
-      setSchedule(scheduleResponse);
-      setblindMode(blind.GetCurrentBehavior(scheduleResponse));
-    });
-    blind.getStatus().then(statsResponse => {
-      setStats(statsResponse);
-    });
+    updateValues(blind);
   }, [blind]);
 
   const sendCommand = (
@@ -94,14 +101,21 @@ const BlindMenu: React.FC<Props> = props => {
     position?: number
   ) => {
     let setPosition: number = 0;
+
     if (position !== undefined) {
       setPosition = position;
     }
-    blind.sendCommand({
-      mode: mode,
-      duration: duration,
-      position: setPosition
-    });
+    let callback = (response: any) => {
+      updateValues(blind);
+    };
+    blind.sendCommand(
+      {
+        mode: mode,
+        duration: duration,
+        position: setPosition,
+      },
+      callback
+    );
   };
 
   return (
@@ -118,7 +132,9 @@ const BlindMenu: React.FC<Props> = props => {
           <ListItemText
             secondary="Indoor Temperature"
             primary={
-              stats === undefined ? LOADING_MESSAGE : `${stats.indoorTemp}°`
+              stats === undefined
+                ? LOADING_MESSAGE
+                : `${Number(stats.indoorTemp).toFixed(2)}°`
             }
           />
         </ListItem>
@@ -135,26 +151,28 @@ const BlindMenu: React.FC<Props> = props => {
           <ListItemText
             secondary="Motor Position"
             primary={
-              stats === undefined ? LOADING_MESSAGE : stats.motorPosition
+              stats === undefined
+                ? LOADING_MESSAGE
+                : `${Number(stats.motorPosition).toFixed(2)}°`
             } //convert
           />
         </ListItem>
 
         <ListItem>
           <ListItemIcon>
-            {schedule === undefined ? (
+            {stats === undefined ? (
               <AutorenewIcon />
-            ) : blindMode.type === "ECO" ? (
-              <EcoIcon />
-            ) : blindMode.type === "LIGHT" ? (
+            ) : stats.mode === "DARK" ? (
+              <Brightness3Icon />
+            ) : stats.mode === "LIGHT" ? (
               <Brightness5Icon />
             ) : (
-              <Brightness3Icon />
+              <EcoIcon />
             )}
           </ListItemIcon>
           <ListItemText
             secondary="Behavior"
-            primary={schedule === undefined ? LOADING_MESSAGE : blindMode.type} //convert
+            primary={stats === undefined ? LOADING_MESSAGE : stats.mode} //convert
           />
         </ListItem>
       </Paper>
@@ -169,7 +187,7 @@ const BlindMenu: React.FC<Props> = props => {
             color="inherit"
           >
             Set Schedule
-          </Button>
+          </Button>,
         ]}
       />
       <CommandModal

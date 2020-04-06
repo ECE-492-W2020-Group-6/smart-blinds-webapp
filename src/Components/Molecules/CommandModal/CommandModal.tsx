@@ -23,7 +23,7 @@ import {
   Select,
   MenuItem,
   Slider,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { BLIND_MODE } from "../../../res/blindTypes";
 
@@ -35,7 +35,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     modalDiv: {
       position: "absolute",
@@ -44,20 +44,21 @@ const styles = (theme: Theme) =>
       border: "2px solid",
       borderRadius: "4px",
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3)
+      padding: theme.spacing(2, 4, 3),
     },
     formControl: {
       margin: theme.spacing(1),
-      midWidth: 120
+      midWidth: 120,
     },
     inputs: {
       display: "flex",
       justifyContent: "left",
-      alignItems: "center"
+      alignItems: "center",
+      flexWrap: "wrap",
     },
     slider: {
-      width: "20%"
-    }
+      width: "20%",
+    },
   });
 
 function getModalStyle() {
@@ -67,7 +68,7 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+    transform: `translate(-${top}%, -${left}%)`,
   };
 }
 
@@ -86,7 +87,7 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; A material-ui 'paper' component displaying stats
  */
-const CommandModal: React.FC<Props> = props => {
+const CommandModal: React.FC<Props> = (props) => {
   const { classes, open, handleClose, sendCommand } = props;
   const [modalStyle] = useState(getModalStyle);
   const [duration, setDuration] = useState(30);
@@ -133,12 +134,13 @@ const CommandModal: React.FC<Props> = props => {
               <InputLabel>Mode</InputLabel>
               <Select value={mode} onChange={handleMode}>
                 <MenuItem value={"ECO"}>Eco</MenuItem>
+                <MenuItem value={"BALANCED"}>Balanced (Auto)</MenuItem>
                 <MenuItem value={"LIGHT"}>Light</MenuItem>
                 <MenuItem value={"DARK"}>Dark</MenuItem>
-                <MenuItem value={"CUSTOM"}>Other</MenuItem>
+                <MenuItem value={"MANUAL"}>Other</MenuItem>
               </Select>
             </FormControl>
-            {mode === "CUSTOM" ? (
+            {mode === "MANUAL" ? (
               <Slider
                 className={classes.slider + " " + classes.formControl}
                 min={-100}
@@ -151,7 +153,7 @@ const CommandModal: React.FC<Props> = props => {
             ) : (
               ""
             )}
-            {mode === "CUSTOM" ? (
+            {mode === "MANUAL" ? (
               <Typography className={classes.formControl}>
                 {angle + "°"}
               </Typography>

@@ -24,12 +24,12 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
-import AcUnitIcon from "@material-ui/icons/AcUnit";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
-import CloudIcon from "@material-ui/icons/Cloud";
+// import AcUnitIcon from "@material-ui/icons/AcUnit";
+// import WbSunnyIcon from "@material-ui/icons/WbSunny";
+// import CloudIcon from "@material-ui/icons/Cloud";
 import { IStats } from "../../../res/Interfaces";
 
 /**
@@ -40,12 +40,12 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     title: {
       flexGrow: 1,
-      padding: theme.spacing(2)
-    }
+      padding: theme.spacing(2),
+    },
   });
 
 /**
@@ -61,7 +61,7 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings
  * @returns React Element; A material-ui 'paper' component displaying stats
  */
-const StatusPaper: React.FC<Props> = props => {
+const StatusPaper: React.FC<Props> = (props) => {
   const { classes, stats } = props;
   return (
     <React.Fragment>
@@ -76,10 +76,10 @@ const StatusPaper: React.FC<Props> = props => {
           </ListItemIcon>
           <ListItemText
             secondary="Indoor Temperature"
-            primary={`${stats.indoorTemp}°`}
+            primary={`${Number(stats.indoorTemp).toFixed(2)}°`}
           />
         </ListItem>
-        <ListItem>
+        {/* <ListItem>
           <ListItemIcon>
             {stats.outdoorTemp < 5 ? <AcUnitIcon /> : <WbSunnyIcon />}
           </ListItemIcon>
@@ -87,8 +87,8 @@ const StatusPaper: React.FC<Props> = props => {
             secondary="Outdoor Temperature"
             primary={`${stats.outdoorTemp}°`}
           />
-        </ListItem>
-        <ListItem>
+        </ListItem> */}
+        {/* <ListItem>
           <ListItemIcon>
             <CloudIcon />
           </ListItemIcon>
@@ -96,7 +96,7 @@ const StatusPaper: React.FC<Props> = props => {
             secondary="Cloud Coverage"
             primary={stats.cloudCoverage}
           />
-        </ListItem>
+        </ListItem> */}
       </Paper>
     </React.Fragment>
   );

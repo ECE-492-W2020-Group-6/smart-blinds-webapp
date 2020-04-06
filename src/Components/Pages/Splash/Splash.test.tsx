@@ -13,27 +13,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Splash from "./Splash";
-import { IStats } from "../../../res/Interfaces";
+
 import Blind from "../../../res/Classes/Blind";
 import { BrowserRouter } from "react-router-dom";
 
 /**
  * Sample object in order to test the render
  */
-const stats: IStats = {
-  indoorTemp: 21,
-  outdoorTemp: 0,
-  cloudCoverage: "Low",
-  motorPosition: 0
-};
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
   ReactDOM.render(
     <BrowserRouter>
       <Splash
-        stats={stats}
         switchBlind={() => 0}
+        addBlind={() => 0}
+        removeBlind={() => 0}
         blindList={[
           new Blind("Test Blinds", {
             address: "localhost",

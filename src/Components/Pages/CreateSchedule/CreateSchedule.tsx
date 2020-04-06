@@ -24,7 +24,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Slider
+  Slider,
 } from "@material-ui/core";
 
 import Blind from "../../../res/Classes/Blind";
@@ -44,7 +44,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(0)
+      padding: theme.spacing(0),
     },
     weekWrapper: {
       display: "grid",
@@ -53,23 +53,23 @@ const styles = (theme: Theme) =>
       gridAutoFlow: "dense",
       justifyItems: "stretch",
       alignItems: "stretch",
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
     timeSlotWrapper: {
       display: "flex",
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "scroll",
-      height: "70vh"
+      height: "70vh",
     },
     dayHeader: {
-      textAlign: "center"
+      textAlign: "center",
     },
     tableRow: {
       height: theme.spacing(6),
       textAlign: "center",
       alignItems: "center",
-      padding: "0px"
+      padding: "0px",
       // display: "grid"
     },
     timeTable: {
@@ -79,30 +79,35 @@ const styles = (theme: Theme) =>
       borderSpacing: "0px",
       width: "calc(100% - 8px)",
       minWidth: theme.spacing(3),
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
     fitTables: {
-      width: "12.5%"
+      width: "12.5%",
     },
     ecoClass: {
       verticalAlign: "middle !important",
-      background: `${theme.palette.primary.light} !important`,
-      color: `${theme.palette.grey[800]} !important`
+      background: `${theme.palette.primary.dark} !important`,
+      color: `${theme.palette.grey[50]} !important`,
     },
     lightClass: {
       verticalAlign: "middle !important",
       background: `${theme.palette.info.light} !important`,
-      color: `${theme.palette.grey[800]} !important`
+      color: `${theme.palette.grey[800]} !important`,
     },
     darkClass: {
       verticalAlign: "middle !important",
       background: `${theme.palette.grey[600]} !important`,
-      color: `${theme.palette.grey[50]} !important`
+      color: `${theme.palette.grey[50]} !important`,
     },
-    customClass: {
+    manualClass: {
       verticalAlign: "middle !important",
       background: `${theme.palette.secondary.light} !important`,
-      color: `${theme.palette.grey[800]} !important`
+      color: `${theme.palette.grey[800]} !important`,
+    },
+    balancedClass: {
+      verticalAlign: "middle !important",
+      background: `${theme.palette.primary.light} !important`,
+      color: `${theme.palette.grey[800]} !important`,
     },
     typeSelect: {
       // position: "fixed",
@@ -111,11 +116,11 @@ const styles = (theme: Theme) =>
       alignItems: "center",
       width: "100%",
       position: "absolute",
-      bottom: "60px"
+      bottom: "60px",
     },
     slider: {
-      width: "20%"
-    }
+      width: "20%",
+    },
   });
 
 interface GridElement extends ReactDataSheet.Cell<GridElement, number> {
@@ -142,14 +147,16 @@ interface Props extends WithStyles<typeof styles> {
  * @param props used to pass in stylings and the blind object
  * @returns React Element; the BlindMenu component
  */
-const CreateSchedule: React.FC<Props> = props => {
+const CreateSchedule: React.FC<Props> = (props) => {
   const { classes, blind } = props;
-  const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
+  const [schedule, setSchedule] = useState(
+    JSON.parse(JSON.stringify(config.defaultObjects.schedule))
+  );
 
   let mapTimeToIndex = (time: Date) => {
     let index = 0;
     index += time.getHours() * 4;
-    index += Math.ceil(time.getMinutes() / 15) * 15;
+    index += Math.ceil(time.getMinutes() / 15);
     return index;
   };
 
@@ -157,10 +164,20 @@ const CreateSchedule: React.FC<Props> = props => {
     ECO: classes.ecoClass,
     LIGHT: classes.lightClass,
     DARK: classes.darkClass,
-    CUSTOM: classes.customClass
+    MANUAL: classes.manualClass,
+    BALANCED: classes.balancedClass,
+  };
+
+  const modeNames: { [mode: string]: string } = {
+    ECO: "Eco",
+    LIGHT: "Light",
+    DARK: "Dark",
+    MANUAL: "Set",
+    BALANCED: "Auto",
   };
 
   let gridFromSchedule = (schedule: ISchedule) => {
+    console.log("newSChed", schedule);
     let grid: TimeGrid[][] = [];
     for (let day = 0; day < 7; day++) {
       let dayName = daysList[day];
@@ -170,10 +187,10 @@ const CreateSchedule: React.FC<Props> = props => {
           grid[time] = [];
         }
         grid[time].push({
-          value: schedule.defaultMode.type.toLowerCase(),
+          value: modeNames[schedule.defaultMode.type],
           mode: schedule.defaultMode,
           className: modeClasses[schedule.defaultMode.type],
-          readOnly: true
+          readOnly: true,
         });
       }
 
@@ -181,7 +198,7 @@ const CreateSchedule: React.FC<Props> = props => {
         const startIdx = mapTimeToIndex(timeSlot.start);
         const endIdx = mapTimeToIndex(timeSlot.end);
         for (let idx = startIdx; idx < endIdx; idx++) {
-          grid[idx][day].value = timeSlot.mode.type.toLowerCase();
+          grid[idx][day].value = modeNames[timeSlot.mode.type];
           grid[idx][day].mode = timeSlot.mode;
           grid[idx][day].className = modeClasses[timeSlot.mode.type];
         }
@@ -191,13 +208,16 @@ const CreateSchedule: React.FC<Props> = props => {
   };
 
   let scheduleFromGrid = (grid: TimeGrid[][]) => {
-    let newSchedule: ISchedule = config.defaultObjects.schedule;
+    let newSchedule: ISchedule = JSON.parse(
+      JSON.stringify(config.defaultObjects.schedule)
+    );
+    console.log("start", newSchedule);
     newSchedule.defaultMode = mode;
     let hoursFromIdx = (idx: number) => {
       return padNumber(Math.floor(idx / 4));
     };
     let minsFromIdx = (idx: number) => {
-      return padNumber((idx % 24) * 15);
+      return padNumber((idx % 4) * 15);
     };
     let padNumber = (val: number) => {
       let str = String(val);
@@ -206,35 +226,48 @@ const CreateSchedule: React.FC<Props> = props => {
       }
       return str;
     };
-    grid.forEach(time => {
-      for (let i = 0; i < time.length; i++) {
-        let block = time[i];
-        newSchedule[daysList[i]].push({
+    for (let idx = 0; idx < grid.length; idx++) {
+      for (let day = 0; day < grid[idx].length; day++) {
+        let block = grid[idx];
+        let endDate = new Date(
+          `2020-01-01T${hoursFromIdx(idx + 1)}:${minsFromIdx(idx + 1)}:00`
+        );
+        if (endDate.getMinutes() === 0 && endDate.getHours() === 0) {
+          endDate.setHours(23);
+          endDate.setMinutes(59);
+        }
+        newSchedule[daysList[day]].push({
           start: new Date(
-            `2020-03-22T${hoursFromIdx(i)}:${minsFromIdx(i)}:00Z`
+            `2020-01-01T${hoursFromIdx(idx)}:${minsFromIdx(idx)}:00`
           ),
-          end: new Date(
-            `2020-03-22T${hoursFromIdx(i + 1)}:${minsFromIdx(i + 1)}:00Z`
-          ),
-          mode: block.mode
+          end: endDate,
+          mode: block[day].mode,
         });
       }
-    });
+    }
+    console.log("end", newSchedule);
     return newSchedule;
   };
 
   const [grid, setGrid] = useState(gridFromSchedule(schedule));
-  const [mode, setMode] = useState(config.defaultObjects.blindMode);
+  const [mode, setMode] = useState<IBlindMode>(config.defaultObjects.blindMode);
   const [percentage, setPercentage] = useState(
     mode.percentage ? mode.percentage : 0
   );
-  const [selection, setSelection] = useState();
+  const [selection, setSelection] = useState<ReactDataSheet.Selection>({
+    start: { i: 0, j: 0 },
+    end: { i: 0, j: 0 },
+  });
+
+  // blind.getSchedule().then((scheduleResponse) => {
+  //   setSchedule(scheduleResponse);
+  // });
 
   useEffect(() => {
     if (blind === undefined) {
       return;
     }
-    blind.getSchedule().then(scheduleResponse => {
+    blind.getSchedule().then((scheduleResponse) => {
       setSchedule(scheduleResponse);
     });
   }, [blind]);
@@ -243,11 +276,16 @@ const CreateSchedule: React.FC<Props> = props => {
     if (schedule === undefined) {
       return;
     }
+
     setGrid(gridFromSchedule(schedule));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schedule]);
 
   let saveSchedule = () => {
     let newSchedule: ISchedule = scheduleFromGrid(grid);
+    console.log("New", newSchedule);
+    console.log("from", grid);
     setSchedule(newSchedule);
     blind.setSchedule(newSchedule);
   };
@@ -286,10 +324,11 @@ const CreateSchedule: React.FC<Props> = props => {
   }
 
   let applySelection = () => {
-    const tempgrid = grid.map(row => [...row]);
+    const tempgrid = grid.map((row) => [...row]);
     for (let i = selection.start.i; i <= selection.end.i; i++) {
       for (let j = selection.start.j; j <= selection.end.j; j++) {
-        tempgrid[i][j].value = mode.type.toLowerCase();
+        tempgrid[i][j].value = modeNames[mode.type];
+        tempgrid[i][j].mode = mode;
         tempgrid[i][j].className = modeClasses[mode.type];
       }
     }
@@ -299,9 +338,9 @@ const CreateSchedule: React.FC<Props> = props => {
   var calendarGrid = (
     <CalendarSheet
       data={grid}
-      valueRenderer={cell => cell.value}
+      valueRenderer={(cell) => cell.value}
       className={classes.timeTable}
-      rowRenderer={props => (
+      rowRenderer={(props) => (
         <tr className={classes.tableRow}>{props.children}</tr>
       )}
       onSelect={(selection: ReactDataSheet.Selection) => {
@@ -313,13 +352,13 @@ const CreateSchedule: React.FC<Props> = props => {
   var calendarLegend = (
     <CalendarSheet
       data={timeLegend}
-      valueRenderer={cell => cell.value}
-      sheetRenderer={props => (
+      valueRenderer={(cell) => cell.value}
+      sheetRenderer={(props) => (
         <table className={classes.timeTable}>
           <tbody>{props.children}</tbody>
         </table>
       )}
-      rowRenderer={props => (
+      rowRenderer={(props) => (
         <tr className={classes.tableRow}>{props.children}</tr>
       )}
     ></CalendarSheet>
@@ -353,17 +392,18 @@ const CreateSchedule: React.FC<Props> = props => {
           </table>
         </div>
         <Paper className={classes.typeSelect}>
-          <Typography>Timeslot mode</Typography>
+          <Typography>Set Mode</Typography>
           <FormControl>
             {/* <InputLabel>Type</InputLabel> */}
             <Select value={mode.type} onChange={handleMode}>
               <MenuItem value={"ECO"}>Eco</MenuItem>
+              <MenuItem value={"BALANCED"}>Balanced (Auto)</MenuItem>
               <MenuItem value={"LIGHT"}>Light</MenuItem>
               <MenuItem value={"DARK"}>Dark</MenuItem>
-              <MenuItem value={"CUSTOM"}>Custom</MenuItem>
+              <MenuItem value={"MANUAL"}>Custom</MenuItem>
             </Select>
           </FormControl>
-          {mode.type === "CUSTOM" ? (
+          {mode.type === "MANUAL" ? (
             <Slider
               className={classes.slider}
               min={-100}
@@ -376,7 +416,7 @@ const CreateSchedule: React.FC<Props> = props => {
           ) : (
             ""
           )}
-          {mode.type === "CUSTOM" ? (
+          {mode.type === "MANUAL" ? (
             <Typography>{percentage + "°"}</Typography>
           ) : (
             ""
@@ -412,7 +452,7 @@ const CreateSchedule: React.FC<Props> = props => {
             color="inherit"
           >
             Cancel
-          </Button>
+          </Button>,
         ]}
       />
     </React.Fragment>
