@@ -21,8 +21,8 @@ class BlindAPI {
           mode: "cors",
           headers: {
             "Content-Type": "text/json",
-            Auth: this.credentials.password
-          }
+            Auth: this.credentials.password,
+          },
           // body: body
         };
         break;
@@ -32,13 +32,13 @@ class BlindAPI {
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
-            Auth: this.credentials.password
+            Auth: this.credentials.password,
           },
-          body: body
+          body: body,
         };
         break;
     }
-    console.log(this.credentials.address + endpoint, requestInit);
+    // console.log(this.credentials.address + endpoint, requestInit);
     return fetch(this.credentials.address + endpoint, requestInit);
   }
 }
