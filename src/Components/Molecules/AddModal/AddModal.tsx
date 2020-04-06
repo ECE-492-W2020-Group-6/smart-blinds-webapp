@@ -19,11 +19,6 @@ import {
   Modal,
   Button,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Slider,
-  Typography,
   TextField,
 } from "@material-ui/core";
 // import { BLIND_MODE } from "../../../res/blindTypes";
@@ -99,12 +94,6 @@ const AddModal: React.FC<Props> = (props) => {
   const [creds, setCreds] = useState<ICredentials>(
     config.defaultObjects.credentials
   );
-  // const handleDuration = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //   setDuration(event.target.value as number);
-  // };
-  // const handleMode = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //   setMode(event.target.value as BLIND_MODE);
-  // };
 
   const handleName = (event: React.ChangeEvent<{ value: unknown }>) => {
     setName(event.target.value as string);

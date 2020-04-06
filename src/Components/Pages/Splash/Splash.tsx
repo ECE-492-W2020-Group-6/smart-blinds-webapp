@@ -73,7 +73,7 @@ interface Props extends WithStyles<typeof styles> {
  * @returns React Element; the Splash page
  */
 const Splash: React.FC<Props> = (props) => {
-  const { blindList, switchBlind, classes, addBlind, removeBlind } = props;
+  const { blindList, switchBlind, classes, addBlind } = props;
 
   let defaultStats = config.defaultObjects.stats;
   // temporary until the webserver is configured
@@ -84,13 +84,6 @@ const Splash: React.FC<Props> = (props) => {
     blindList[0].getStatus().then((statusResponse: IStats) => {
       setStats(statusResponse);
     });
-    // const interval = setInterval(() => {
-    //   blindList[0].getStatus().then((statusResponse: IStats) => {
-    //     console.log("updated");
-    //     setStats(statusResponse);
-    //   });
-    // }, 1000 * 5);
-    // return () => clearInterval(interval);
   }, [blindList]);
 
   const [modalOpen, setOpen] = useState(false);
@@ -107,7 +100,7 @@ const Splash: React.FC<Props> = (props) => {
       <Divider />
       <List className={classes.list}>
         {blindList.map((blind: Blind) => (
-          <React.Fragment key={blind.getAddress()}>
+          <React.Fragment key={blind.getAddress() + blind.getName()}>
             <Paper>
               <ListItem
                 button

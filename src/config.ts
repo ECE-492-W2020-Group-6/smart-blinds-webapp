@@ -33,24 +33,24 @@ const defaultSchedule: ISchedule = {
   saturday: [],
   sunday: [],
 };
-let realTestBlind: Blind = new Blind("Physical Test", {
+let realTestBlind: Blind = new Blind("Real Blind", {
   address: "http://10.147.17.181:5000",
   password: "",
 });
 
-let localServerBlind: Blind = new Blind("Local Test", {
+let localServerBlind: Blind = new Blind("Localhost", {
   address: "http://127.0.0.1:5000",
   password: "",
 });
 
-let testBlind: Blind = new Blind("Test Blinds", {
-  address: "localhost",
-  password: "123pass",
-});
-let otherBlind: Blind = new Blind("Other blinds", {
-  address: "1.255.02.3",
-  password: "pass123",
-});
+// let testBlind: Blind = new Blind("Test Blinds", {
+//   address: "localhost",
+//   password: "123pass",
+// });
+// let otherBlind: Blind = new Blind("Other blinds", {
+//   address: "1.255.02.3",
+//   password: "pass123",
+// });
 const sampleStats: IStats = {
   indoorTemp: 21,
   // outdoorTemp: 20,
@@ -93,7 +93,7 @@ const config: IConfig = {
   testCases: {
     schedules: [defaultSchedule],
     stats: [sampleStats],
-    blinds: [localServerBlind, realTestBlind, testBlind, otherBlind],
+    blinds: [localServerBlind, realTestBlind],
   },
   defaultObjects: {
     schedule: defaultSchedule,

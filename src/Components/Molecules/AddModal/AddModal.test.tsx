@@ -16,13 +16,13 @@ import { IStats } from "../../../res/Interfaces";
 import config from "../../../config";
 import Blind from "../../../res/Classes/Blind";
 
-const blind = new Blind("blind", config.defaultObjects.credentials);
+const newBlind = new Blind("blind", config.defaultObjects.credentials);
 
 config.testCases.stats.forEach((testStats: IStats) => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(
-      <AddModal open={true} addBlind={(blind) => 0} handleClose={() => 0} />,
+      <AddModal open={true} addBlind={(newBlind) => 0} handleClose={() => 0} />,
       div
     );
     ReactDOM.unmountComponentAtNode(div);
