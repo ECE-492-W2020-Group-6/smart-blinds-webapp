@@ -149,7 +149,9 @@ interface Props extends WithStyles<typeof styles> {
  */
 const CreateSchedule: React.FC<Props> = (props) => {
   const { classes, blind } = props;
-  const [schedule, setSchedule] = useState(config.defaultObjects.schedule);
+  const [schedule, setSchedule] = useState(
+    JSON.parse(JSON.stringify(config.defaultObjects.schedule))
+  );
 
   let mapTimeToIndex = (time: Date) => {
     let index = 0;
@@ -206,7 +208,10 @@ const CreateSchedule: React.FC<Props> = (props) => {
   };
 
   let scheduleFromGrid = (grid: TimeGrid[][]) => {
-    let newSchedule: ISchedule = config.defaultObjects.schedule;
+    let newSchedule: ISchedule = JSON.parse(
+      JSON.stringify(config.defaultObjects.schedule)
+    );
+    console.log("start", newSchedule);
     newSchedule.defaultMode = mode;
     let hoursFromIdx = (idx: number) => {
       return padNumber(Math.floor(idx / 4));
@@ -240,6 +245,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
         });
       }
     }
+    console.log("end", newSchedule);
     return newSchedule;
   };
 
