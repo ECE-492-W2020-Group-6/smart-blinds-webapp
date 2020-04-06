@@ -73,7 +73,7 @@ interface Props extends WithStyles<typeof styles> {
  * @returns React Element; the Splash page
  */
 const Splash: React.FC<Props> = (props) => {
-  const { blindList, switchBlind, classes } = props;
+  const { blindList, switchBlind, classes, addBlind, removeBlind } = props;
 
   let defaultStats = config.defaultObjects.stats;
   // temporary until the webserver is configured
@@ -130,7 +130,7 @@ const Splash: React.FC<Props> = (props) => {
       <AddModal
         open={modalOpen}
         handleClose={handleClose}
-        // sendCommand={sendCommand}
+        addBlind={addBlind}
       ></AddModal>
       <Footer
         buttons={[

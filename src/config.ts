@@ -1,4 +1,4 @@
-import { ISchedule, IStats, IBlindMode } from "./res/Interfaces";
+import { ISchedule, IStats, IBlindMode, ICredentials } from "./res/Interfaces";
 import Blind from "../src/res/Classes/Blind";
 
 const defaultBlindMode: IBlindMode = {
@@ -34,12 +34,12 @@ const defaultSchedule: ISchedule = {
   sunday: [],
 };
 let realTestBlind: Blind = new Blind("Physical Test", {
-  address: "http://10.147.17.181:5000/api/v1",
+  address: "http://10.147.17.181:5000",
   password: "",
 });
 
 let localServerBlind: Blind = new Blind("Local Test", {
-  address: "http://127.0.0.1:5000/api/v1",
+  address: "http://127.0.0.1:5000",
   password: "",
 });
 
@@ -81,6 +81,7 @@ interface IConfig {
     schedule: ISchedule;
     blindMode: IBlindMode;
     stats: IStats;
+    credentials: ICredentials;
   };
 }
 
@@ -98,6 +99,7 @@ const config: IConfig = {
     schedule: defaultSchedule,
     blindMode: defaultBlindMode,
     stats: defaultStats,
+    credentials: { address: "http://10.147.17.181:5000", password: "" },
   },
 };
 

@@ -22,6 +22,8 @@ import {
 // import config from "../../../config";
 import { daysList } from "../../blindTypes";
 
+const API = "/api/v1";
+
 /**
  * Abstracts Smart Blind operation
  */
@@ -43,7 +45,7 @@ class Blind {
    * @returns a promise that resolves to an [[IStats]] object
    */
   async getStatus(): Promise<IStats> {
-    let response = await this.BlindAPI.createFetch("/status", "GET");
+    let response = await this.BlindAPI.createFetch(API + "/status", "GET");
     let responseJSON = await response.clone().json();
     let status: IStats = {
       indoorTemp: responseJSON.temperature,
@@ -96,7 +98,7 @@ class Blind {
    * @returns a promise that resolves to an [[ISchedule]] object
    */
   async getSchedule(): Promise<ISchedule> {
-    let response = await this.BlindAPI.createFetch("/schedule", "GET");
+    let response = await this.BlindAPI.createFetch(API + "/schedule", "GET");
     let responseJSON = await response.clone().json();
     let schedule: ISchedule = {
       defaultMode: {
@@ -143,7 +145,7 @@ class Blind {
     let convSchedule = this.scheduleToJson(schedule);
 
     this.BlindAPI.createFetch(
-      "/schedule",
+      API + "/schedule",
       "POST",
       JSON.stringify(convSchedule)
     );
@@ -155,7 +157,7 @@ class Blind {
    */
   async sendCommand(command: IBlindCommand, callback: (response: any) => void) {
     let response = await this.BlindAPI.createFetch(
-      "/command",
+      API + "/command",
       "POST",
       JSON.stringify(command)
     );
