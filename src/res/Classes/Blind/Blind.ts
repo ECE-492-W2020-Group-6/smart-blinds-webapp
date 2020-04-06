@@ -158,12 +158,21 @@ class Blind {
   /**
    * @param command sends a new command to the device
    */
-  async sendCommand(command: IBlindCommand, callback: (response: any) => void) {
-    let response = await this.BlindAPI.createFetch(
-      "/command",
-      "POST",
-      JSON.stringify(command)
-    );
+  async sendCommand(
+    reset: boolean,
+    command: IBlindCommand,
+    callback: (response: any) => void
+  ) {
+    let response;
+    if (reset) {
+      response = await this.BlindAPI.createFetch("/command", "DELETE");
+    } else {
+      response = await this.BlindAPI.createFetch(
+        "/command",
+        "POST",
+        JSON.stringify(command)
+      );
+    }
     let responseJSON = await response.clone().json();
     callback(responseJSON);
   }

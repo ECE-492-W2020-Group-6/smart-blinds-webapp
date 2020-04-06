@@ -77,7 +77,12 @@ function getModalStyle() {
  * @param stats stats to display
  */
 interface Props extends WithStyles<typeof styles> {
-  sendCommand: (mode: BLIND_MODE, duration: number, amount?: number) => void;
+  sendCommand: (
+    reset: boolean,
+    mode: BLIND_MODE,
+    duration: number,
+    amount?: number
+  ) => void;
   open: boolean;
   handleClose: () => void;
 }
@@ -162,11 +167,19 @@ const CommandModal: React.FC<Props> = (props) => {
             )}
             <Button
               onClick={() => {
-                sendCommand(mode, duration, angle);
+                sendCommand(false, mode, duration, angle);
                 handleClose();
               }}
             >
               Send
+            </Button>
+            <Button
+              onClick={() => {
+                sendCommand(true, mode, duration, angle);
+                handleClose();
+              }}
+            >
+              Clear Commands
             </Button>
           </div>
         </div>

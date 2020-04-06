@@ -2,7 +2,7 @@ import { ICredentials } from "../../Interfaces";
 
 const API_ENDPOINT = "/api/v1";
 
-type VALID_METHOD = "GET" | "POST";
+type VALID_METHOD = "GET" | "POST" | "DELETE";
 class BlindAPI {
   private credentials: ICredentials;
   private jwt: string;
@@ -64,6 +64,17 @@ class BlindAPI {
             // Auth: this.credentials.password,
           },
           body: body,
+        };
+        break;
+      case "DELETE":
+        requestInit = {
+          method: method,
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": this.jwt,
+            // Auth: this.credentials.password,
+          },
         };
         break;
     }
