@@ -177,7 +177,6 @@ const CreateSchedule: React.FC<Props> = (props) => {
   };
 
   let gridFromSchedule = (schedule: ISchedule) => {
-    console.log("newSChed", schedule);
     let grid: TimeGrid[][] = [];
     for (let day = 0; day < 7; day++) {
       let dayName = daysList[day];
@@ -211,7 +210,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
     let newSchedule: ISchedule = JSON.parse(
       JSON.stringify(config.defaultObjects.schedule)
     );
-    console.log("start", newSchedule);
+
     newSchedule.defaultMode = mode;
     let hoursFromIdx = (idx: number) => {
       return padNumber(Math.floor(idx / 4));
@@ -245,7 +244,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
         });
       }
     }
-    console.log("end", newSchedule);
+
     return newSchedule;
   };
 
@@ -284,8 +283,7 @@ const CreateSchedule: React.FC<Props> = (props) => {
 
   let saveSchedule = () => {
     let newSchedule: ISchedule = scheduleFromGrid(grid);
-    console.log("New", newSchedule);
-    console.log("from", grid);
+
     setSchedule(newSchedule);
     blind.setSchedule(newSchedule);
   };

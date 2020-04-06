@@ -1,11 +1,36 @@
 import { ICredentials } from "../../Interfaces";
 
+const API_ENDPOINT = "/api/v1";
+
 type VALID_METHOD = "GET" | "POST";
 class BlindAPI {
   private credentials: ICredentials;
+  private jwt: string;
 
   constructor(credentials: ICredentials) {
     this.credentials = credentials;
+    this.jwt = "";
+    this.getJWT();
+  }
+
+  async getJWT() {
+    let requestInit: RequestInit = {};
+
+    requestInit = {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: this.credentials.password,
+      },
+    };
+
+    let response = await fetch(
+      this.credentials.address + "/login",
+      requestInit
+    );
+    let responseJSON = await response.clone().json();
+    this.jwt = responseJSON.token;
   }
 
   async createFetch(
@@ -21,7 +46,8 @@ class BlindAPI {
           mode: "cors",
           headers: {
             "Content-Type": "text/json",
-            Auth: this.credentials.password,
+            "x-access-token": this.jwt,
+            // Auth: this.credentials.password,
           },
           // body: body
         };
@@ -32,14 +58,30 @@ class BlindAPI {
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
-            Auth: this.credentials.password,
+            "x-access-token": this.jwt,
+            // Auth: this.credentials.password,
           },
           body: body,
         };
         break;
     }
-    // console.log(this.credentials.address + endpoint, requestInit);
-    return fetch(this.credentials.address + endpoint, requestInit);
+    // console.log(
+    //   this.credentials.address + API_ENDPOINT + endpoint,
+    //   requestInit
+    // );
+    let fetchResp = fetch(
+      this.credentials.address + API_ENDPOINT + endpoint,
+      requestInit
+    );
+    if ((await fetchResp).status === 200) {
+      return fetchResp;
+    } else {
+      await this.getJWT();
+      return fetch(
+        this.credentials.address + API_ENDPOINT + endpoint,
+        requestInit
+      );
+    }
   }
 }
 
