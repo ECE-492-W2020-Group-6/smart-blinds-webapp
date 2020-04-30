@@ -6614,9 +6614,9 @@ jest@24.9.0:
     jest-cli "^24.9.0"
 
 jquery@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
-  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
+  integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -9266,6 +9266,11 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-datasheet@^1.4.1:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/react-datasheet/-/react-datasheet-1.4.3.tgz#93ce39ec5d53ee9aeaf96153b6aee886bfe1247e"
+  integrity sha512-ZUjycZXEb5JhMEjQKWYTjl28YpA3tyb+0vP9T/HpaiDjPw2bTPFco4nc0G8geLSPUweRLnqkKHd0L4G5gE43nw==
 
 react-dev-utils@^10.1.0:
   version "10.1.0"
