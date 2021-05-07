@@ -9267,6 +9267,11 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
+react-datasheet@^1.4.1:
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/react-datasheet/-/react-datasheet-1.4.9.tgz#fe1c1adcccb62f07a94262ac1c3a8a285740694a"
+  integrity sha512-/UoIw/bnqeFT205IE+eESm0APLUnSl0ZPqG6mrKszgNB578cm+06GuPg79UxFOiobVeWXtrLwa/yNUQc+OiOfQ==
+
 react-dev-utils@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-10.1.0.tgz#ccf82135f6dc2fc91969bc729ce57a69d8e86025"
@@ -11030,9 +11035,9 @@ uglify-js@^3.1.4:
     source-map "~0.6.1"
 
 underscore@>=1.8.3, underscore@^1.9.1:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.2.tgz#0c8d6f536d6f378a5af264a72f7bec50feb7cf2f"
-  integrity sha512-D39qtimx0c1fI3ya1Lnhk3E9nONswSKhnffBI0gME9C99fYOkNi04xs8K6pePLhvl1frbDemkaBQ5ikWllR2HQ==
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.1.tgz#0c1c6bd2df54b6b69f2314066d65b6cde6fcf9d1"
+  integrity sha512-hzSoAVtJF+3ZtiFX0VgfFPHEDRm7Y/QPjGyNo4TVdnDTdft3tr8hEkD25a1jC+TjTuE7tkHGKkhwCgs9dgBB2g==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
